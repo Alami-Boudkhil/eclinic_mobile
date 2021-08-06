@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 Widget defaultButton({
@@ -41,7 +43,7 @@ Widget defaultFormField({
   FormFieldValidator? validate,
   required String label,
   required IconData prefix,
-  IconData? suffix,
+  IconButton? suffix,
 }) => TextFormField(
   controller: controller,
   keyboardType: type,
@@ -54,9 +56,37 @@ Widget defaultFormField({
     prefixIcon: Icon(
       prefix,
     ),
-    suffixIcon: suffix != null ? Icon(
-      suffix,
-    ) : null,
+    suffixIcon: suffix != null ? suffix : null,
     border: OutlineInputBorder(),
   ),
 );
+
+
+
+
+Widget buildPopupDialog(
+  BuildContext context,
+  {required String title,
+  required String msg}
+  ) 
+  {
+  return  AlertDialog(
+    title: Text(title,),
+    content:  Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("$msg"),
+      ],
+    ),
+    actions:[TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(
+          'Close',
+          style: TextStyle(color: Colors.blue),),
+      ),
+    ],
+  );
+  }

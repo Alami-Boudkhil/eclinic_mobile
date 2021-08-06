@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:eclinic_mobile/signup_screen.dart';
-import 'package:eclinic_mobile/login_screen.dart';
+import 'package:eclinic_mobile/modules/sign_up/signup_screen.dart';
+import 'package:eclinic_mobile/modules/login/login_screen.dart';
 import 'package:eclinic_mobile/main.dart';
 import 'package:eclinic_mobile/shared/components.dart';
 import 'package:flutter/material.dart';
