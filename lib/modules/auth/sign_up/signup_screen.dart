@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:eclinic_mobile/shared/components.dart';
-import 'package:eclinic_mobile/modules/login/login_screen.dart';
+import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:eclinic_mobile/modules/patient_view/patient_profile.dart';
 
