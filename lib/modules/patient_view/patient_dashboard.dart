@@ -2,17 +2,19 @@
 
 
 import 'dart:convert';
-//import 'dart:js';
-
-
 import 'package:eclinic_mobile/welcome_screen.dart';
 import 'package:flutter/material.dart'; 
 import 'package:http/http.dart' as http;
+import 'package:eclinic_mobile/modules/patient_view/patient_profile.dart';
 
 
-class PatientScreeen extends StatelessWidget {
+class PatientScreeen extends StatefulWidget {
+  @override
+  _PatientScreeenState createState() => _PatientScreeenState();
+}
+
+class _PatientScreeenState extends State<PatientScreeen> {
   var  userToken='';
-  //PatientScreeen({  required this.userToken}) : super();
 
   Future userlogout()async{
 
@@ -28,7 +30,7 @@ class PatientScreeen extends StatelessWidget {
 
     if(response.statusCode==200){
       print('logout YOLO!!');
-      //Navigator.pop(context);
+      Navigator.pop(context);
 }
     }
 
@@ -61,6 +63,24 @@ class PatientScreeen extends StatelessWidget {
               onPressed: (){
                 userlogout();
                 
+              },
+              ),
+              SizedBox(
+              height:20.00,
+            ),
+            TextButton(
+              child:Text(
+                'view profile',
+                style: TextStyle(
+                  color: Colors.blue
+                ),
+
+              ),
+                onPressed: (){
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PatienProfiletScreeen ()));
               },
               ),
           ],

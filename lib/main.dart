@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eclinic_mobile/welcome_screen.dart';
+import 'package:flutter/services.dart';
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   runApp(MyApp());
 }
 

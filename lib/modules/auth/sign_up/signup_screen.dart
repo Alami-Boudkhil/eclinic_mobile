@@ -64,8 +64,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           context,
           MaterialPageRoute(
               builder: (context) => PatienProfiletScreeen(
-                    response: response.body,
-                    email: emailController.text,
+                   // response: response.body,
+                    //email: emailController.text,
                   )));
     } else {
       print(response.body);
