@@ -1,8 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:eclinic_mobile/shared/components.dart';
 import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:eclinic_mobile/modules/patient_view/patient_profile.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -18,60 +17,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var formKey = GlobalKey<FormState>();
   bool isObsecure1 = true;
   bool isObsecure2 = true;
-
-  Future usersignup() async {
-    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/registration/');
-
-    var data = {
-      "user": {
-        "password1": passwordController.text,
-        "password2": passwordConfirmationController.text,
-        "last_login": null,
-        "is_superuser": false,
-        "first_name": "",
-        "last_name": "",
-        "is_active": false,
-        "date_joined": DateTime.now().toString(),
-        "sex": "Male",
-        "email": emailController.text,
-        "role": "Patient",
-        "image": null,
-        "phone": "",
-        "date_of_birth": null,
-        "city": "",
-        "address": "",
-        "is_confirmed": false
-      },
-      "type": "ATP",
-      "education_level": "NONE",
-      "is_approved": false,
-    };
-
-    final http.Response response = await http.post(url,
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
-        body: json.encode(data));
-
-    if (response.statusCode == 201) {
-      //final Map<String, dynamic> responseData = json.decode(response.body);
-
-      print('SignUp YOLO!!');
-      print(response.body);
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PatienProfiletScreeen(
-                   // response: response.body,
-                    //email: emailController.text,
-                  )));
-    } else {
-      print(response.body);
-      print('error');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +169,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: defaultButton(
                   function: () {
                     if (formKey.currentState!.validate()) {
-                      usersignup();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PatienProfiletScreeen(
+                                email: emailController.text,
+                                password1: passwordController.text,
+                                password2: passwordConfirmationController.text,
+                              )));
                     }
                   },
                   text: 'sign Up',

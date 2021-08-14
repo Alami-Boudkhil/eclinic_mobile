@@ -39,10 +39,13 @@ Widget defaultFormField({
   required TextInputType type,
   ValueChanged? onSubmit,
   ValueChanged? onChange,
+  void Function()? onTap,
+  bool readOnly=false,
   bool isPassword = false,
   FormFieldValidator? validate,
+  String? initialValue,
   required String label,
-  required IconData prefix,
+  IconData? prefix,
   IconButton? suffix,
 }) => TextFormField(
   controller: controller,
@@ -50,7 +53,10 @@ Widget defaultFormField({
   obscureText: isPassword,
   onFieldSubmitted: onSubmit,
   onChanged: onChange,
+  onTap: onTap,
+  readOnly: readOnly,
   validator: validate,
+  initialValue: initialValue,
   decoration: InputDecoration(
     labelText: label,
     prefixIcon: Icon(

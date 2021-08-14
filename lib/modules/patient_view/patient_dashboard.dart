@@ -77,10 +77,7 @@ class _PatientScreeenState extends State<PatientScreeen> {
 
               ),
                 onPressed: (){
-                Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PatienProfiletScreeen ()));
+            
               },
               ),
           ],
