@@ -91,7 +91,7 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-         builder: (context) => PatientScreeen()));
+         builder: (context) => PatientHomeScreeen()));
       final snackBar = SnackBar(content: Text('SinUp succesfuly ,Welcome!'));   
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
@@ -108,19 +108,19 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            //color: Colors.black,
+            color: Colors.black,
             onPressed: () {},
             icon: Icon(Icons.menu)),
-        elevation: 00.00,
-        backgroundColor: Colors.blue[400],
+        elevation: 8.00,
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           'complete your profile',
-          //style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
         actions: [
           IconButton(
-              //color: Colors.black,
+              color: Colors.black,
               onPressed: () {},
               icon: Icon(Icons.notification_important_rounded)),
         ],
@@ -130,7 +130,7 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
         child: Container(
           color: Colors.white,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -138,7 +138,7 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                   children: [
                     Stack(children: [
                       CircleAvatar(
-                        radius: 50.00,
+                        radius: 60.00,
                         foregroundImage:
                             AssetImage('assets/images/default_profile.png'),
                         child: IconButton(
@@ -440,7 +440,8 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                         },
                         text: 'complete your profile',
                         radius: 20,
-                        width: 300),
+                        //width: 300,
+                        background: Colors.blue[800]),
                   ],
                 ),
               ),

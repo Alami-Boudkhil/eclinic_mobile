@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Token:'+userToken);
       Navigator.push(
         context, 
-        MaterialPageRoute(builder :(context)=> PatientScreeen()));
+        MaterialPageRoute(builder :(context)=> PatientHomeScreeen()));
 
     }
     else if (response.statusCode==400)

@@ -8,12 +8,12 @@ import 'package:http/http.dart' as http;
 import 'package:eclinic_mobile/modules/patient_view/patient_profile.dart';
 
 
-class PatientScreeen extends StatefulWidget {
+class PatientHomeScreeen extends StatefulWidget {
   @override
-  _PatientScreeenState createState() => _PatientScreeenState();
+  _PatientHomeScreeenState createState() => _PatientHomeScreeenState();
 }
 
-class _PatientScreeenState extends State<PatientScreeen> {
+class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
   var  userToken='';
 
   Future userlogout()async{
