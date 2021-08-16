@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:eclinic_mobile/modules/patient_view/patient_dashboard.dart';
+import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 import 'package:intl/intl.dart';
 
 
@@ -107,23 +108,15 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
     emailController.text=widget.email;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            color: Colors.black,
-            onPressed: () {},
-            icon: Icon(Icons.menu)),
+        leading: Icon(Icons.person,color: Colors.black,size:35),
         elevation: 8.00,
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           'complete your profile',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.oswald(color: Colors.black,fontSize: 28),
         ),
-        actions: [
-          IconButton(
-              color: Colors.black,
-              onPressed: () {},
-              icon: Icon(Icons.notification_important_rounded)),
-        ],
+        
       ),
       body: Form(
         key:formKey ,

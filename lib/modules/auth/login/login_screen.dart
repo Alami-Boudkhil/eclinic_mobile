@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import "package:eclinic_mobile/shared/components.dart";
 import 'package:eclinic_mobile/modules/auth/sign_up/signup_screen.dart';
 import 'package:http/http.dart' as http;
-import 'package:eclinic_mobile/modules/patient_view/patient_dashboard.dart';
+import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -50,6 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context, 
         MaterialPageRoute(builder :(context)=> PatientHomeScreeen()));
+      final snackBar = SnackBar(content: Text('Loged IN succesfuly ,Welcome!'));   
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     }
     else if (response.statusCode==400)

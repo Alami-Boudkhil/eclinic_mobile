@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eclinic_mobile/shared/components.dart';
 import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
-
-import 'package:eclinic_mobile/modules/patient_view/patient_profile.dart';
+import 'package:eclinic_mobile/modules/patient_view/profile_completion.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override

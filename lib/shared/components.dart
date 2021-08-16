@@ -45,6 +45,7 @@ Widget defaultFormField({
   FormFieldValidator? validate,
   String? initialValue,
   required String label,
+  double raduis=20, 
   IconData? prefix,
   IconButton? suffix,
 }) => TextFormField(
@@ -63,7 +64,9 @@ Widget defaultFormField({
       prefix,
     ),
     suffixIcon: suffix != null ? suffix : null,
-    border: OutlineInputBorder(),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(raduis),
+    ),
   ),
 );
 
