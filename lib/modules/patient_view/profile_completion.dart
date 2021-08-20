@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:eclinic_mobile/models/patient_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
@@ -20,10 +21,10 @@ class PatienProfiletScreeen extends StatefulWidget {
   _PatienProfiletScreeenState createState() => _PatienProfiletScreeenState();
 }
 
+
 class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
   Object? _groupValue = -1;
-  var formKey = GlobalKey<FormState>();
-  
+  var formKey = GlobalKey<FormState>();  
 
   List<String> types = ['ATP', 'Student', 'Teacher'];
   List<String> atpEL = ['NONE'];
@@ -86,13 +87,25 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
 
     if (response.statusCode == 201) {
       //final Map<String, dynamic> responseData = json.decode(response.body);
-
+      PatientModel patientModel=new PatientModel(
+        pid: '',
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        sex: userSex,
+        email: widget.email,
+        phoneNumber: phoneNumberController.text,
+        dateOfBirth: dateBirthController.text,
+        city: cityController.text,
+        address: addressController.text,
+        type: selectedType,
+        educationalLevel: selectedEL,
+        );
       print('SignUp YOLO!!');
       print(response.body);
       Navigator.push(
         context,
         MaterialPageRoute(
-         builder: (context) => PatientHomeScreeen()));
+         builder: (context) => PatientHomeScreeen(patientModel: patientModel, password1: widget.password1,)));
       final snackBar = SnackBar(content: Text('SinUp succesfuly ,Welcome!'));   
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {

@@ -1,8 +1,10 @@
 
 
+import 'package:eclinic_mobile/models/patient_model.dart';
 import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
 import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
 import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
+import 'package:eclinic_mobile/welcome_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart'; 
@@ -11,19 +13,23 @@ import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
 
 
 class PatientHomeScreeen extends StatefulWidget {
+  
+  PatientModel patientModel;
+  String password1;
+  PatientHomeScreeen({ required this.patientModel, required this.password1});
   @override
   _PatientHomeScreeenState createState() => _PatientHomeScreeenState();
 }
 
 class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
-  var  userToken='';
+  
 
   Future userlogout()async{
 
     Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/logout/'); 
 
     var data = {
-    "key":userToken,
+    "key":widget.patientModel.token,
 
     };
 
@@ -32,7 +38,10 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
 
     if(response.statusCode==200){
       print('logout YOLO!!');
-      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => WelcomeScreen())); 
 }
     }
 
@@ -77,7 +86,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
                   Navigator.push(
                   context,
                   MaterialPageRoute(
-                  builder: (context) => DisplayProfiletScreeen()));              
+                  builder: (context) => DisplayProfiletScreeen(patientModel: widget.patientModel,password1: widget.password1,)));              
                   },
                 child: Container(
                   decoration: BoxDecoration(
@@ -175,11 +184,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
             Expanded(
               child: InkWell(
                 onTap: (){
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                  builder: (context) => LoginScreen()));
-                  //TODO:implement the logout method
+                  userlogout();
                   },
                 child: Container(
                   decoration: BoxDecoration(

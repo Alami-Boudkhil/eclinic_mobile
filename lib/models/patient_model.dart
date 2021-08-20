@@ -2,35 +2,43 @@
 import 'package:flutter/cupertino.dart';
 
 class PatientModel{
-  String firstName;
-  String lastName;
-  String sex;
+  String? pid;
+  String? token;
+  String? cookie;
+  String? firstName;
+  String? lastName;
+  String? sex;
   String email;
-  Image image;
-  String phoneNumber;
-  DateTime dateOfBirth;
-  int city;
-  String address;
-  String type;
-  String educationalLevel;
+  Image? image;
+  String? phoneNumber;
+  String? dateOfBirth;
+  String? city;
+  String? address;
+  String? type;
+  String? educationalLevel;
 
 
   PatientModel(
-    {required this.firstName,
-    required this.lastName,
-    required this.sex,
+    {
+    this.pid,
+    this.token,
+    this.cookie,
+    this.firstName,
+    this.lastName,
+    this.sex,
     required this.email,
-    required this.image,
-    required this.phoneNumber,
-    required this.dateOfBirth,
-    required this.city,
-    required this.address,
-    required this.type,
-    required this.educationalLevel,
+    this.image,
+    this.phoneNumber,
+    this.dateOfBirth,
+    this.city,
+    this.address,
+    this.type,
+    this.educationalLevel,
     }
   );
 
   PatientModel? fromJson(Map<String, dynamic> json) {
+    pid=json['pid'];
     firstName= json['first_name'];
     lastName= json['last_name'];
     sex= json['sex'];
@@ -46,6 +54,7 @@ class PatientModel{
 
   Map<String, dynamic> toJson(){
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['pid']=this.pid;
     data['first_name']=this.firstName;
     data['last_name']=this.lastName;
     data['sex']=this.sex;

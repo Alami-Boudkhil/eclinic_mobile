@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import "package:eclinic_mobile/shared/components.dart";
 import 'package:eclinic_mobile/modules/auth/sign_up/signup_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
+import 'package:eclinic_mobile/models/patient_model.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -22,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final  passwordController= TextEditingController();
 
   var formKey = GlobalKey<FormState>();
-  var userToken='';
+  late PatientModel patientModel;
   bool isObsecure=true;
 
   Future userlogin()async{
@@ -43,13 +45,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if(response.statusCode==200)
     {
-      userToken=responseData["key"];
-
+      patientModel=new PatientModel(
+        email: emailController.text,
+        token: responseData['key'],
+        cookie: response.headers['set-cookie']
+        );
+        
+      print(patientModel.cookie);
       print('login YOLO!!');
-      print('Token:'+userToken);
+      print('Token:'+patientModel.token!);
       Navigator.push(
         context, 
-        MaterialPageRoute(builder :(context)=> PatientHomeScreeen()));
+        MaterialPageRoute(builder :(context)=> PatientHomeScreeen(patientModel: patientModel ,password1: passwordController.text,)));
       final snackBar = SnackBar(content: Text('Loged IN succesfuly ,Welcome!'));   
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 

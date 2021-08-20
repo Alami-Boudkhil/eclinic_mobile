@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:eclinic_mobile/models/patient_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
@@ -10,18 +12,18 @@ import 'package:intl/intl.dart';
 
 
 class DisplayProfiletScreeen extends StatefulWidget {
-  String email='email@esi-sba.dz';
-  String password1='';
-  String password2='';
+  PatientModel patientModel;
+  String password1;
+  String? password2;
 
-  //DisplayProfiletScreeen(
-      //{required this.email, required this.password1, required this.password2});
+  DisplayProfiletScreeen(
+      { required this.patientModel,  required this.password1,  this.password2});
   @override
   _DisplayProfiletScreeenState createState() => _DisplayProfiletScreeenState();
 }
 
 class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
-  Object? _groupValue = -1;
+  Object? _groupValue;
   var formKey = GlobalKey<FormState>();
   
 
@@ -37,12 +39,12 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
     '3CS-SIW'
   ];
   List<String> teacherEL = ['MA-A', 'MA-B', 'MC-A', 'MC-B', 'Professor'];
-  String selectedType = 'ATP';
+  String? selectedType;
   List<String> selectedElList = [];
-  String? selectedEL = 'NONE';
+  String? selectedEL;
 
 
-  final firstNameController = TextEditingController();
+  var firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   String userSex='Male';
   final emailController = TextEditingController();
@@ -59,68 +61,136 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
   bool editCity=false;
   bool editAddress=false;
   
-
   
-  Future userUpdate() async {
-    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/registration/');
+  Future userGet()async{
+    
+    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/user/');
+    String cookie=widget.patientModel.cookie!;
+    String? sessionid;
+    if (cookie.contains('sessionid')) {
+    List at = RegExp(r'(sessionid)(.*?)[^;]+').stringMatch(cookie)!.split('=');
+    sessionid = at[1];
+  }
+    print(widget.patientModel.cookie);
+    print(widget.patientModel.token);
+    print(sessionid);
+    final http.Response response = await http.get(
+      url,
+      headers: {'Authorization':widget.patientModel.token!,'Cookie': 'sessionid=$sessionid;'}
+      );
 
-    var data = {
-      "user": {
-        "password1": widget.password1,
-        "password2": widget.password2,
-        "last_login": null,
-        "is_superuser": false,
-        "first_name": firstNameController.text,
-        "last_name": lastNameController.text,
-        "is_active": false,
-        "date_joined": DateTime.now().toString(),
-        "sex": userSex,
-        "email":emailController.text,
-        "role": "Patient",
-        "image": null,
-        "phone": phoneNumberController.text,
-        "date_of_birth": dateBirthController.text,
-        "city": cityController.text,
-        "address": addressController.text,
-        "is_confirmed": false
-      },
-      "type": selectedType,
-      "education_level": selectedEL,
-      "is_approved": false,
-    };
+    if(response.statusCode==200){
 
-    final http.Response response = await http.post(url,
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
-        body: json.encode(data));
+      print('YOLO');
+      Map<String,dynamic> userDetails=jsonDecode(response.body);
+      
+      widget.patientModel.pid=userDetails['patient']['pid'];
+      widget.patientModel.firstName=userDetails['first_name'];
+      widget.patientModel.lastName=userDetails['last_name'];
+      widget.patientModel.sex=userDetails['sex'];
+      widget.patientModel.email=userDetails['email'];
+      widget.patientModel.phoneNumber=userDetails['phone'];
+      widget.patientModel.dateOfBirth=userDetails['date_of_birth'];
+      widget.patientModel.city=userDetails['city'];
+      widget.patientModel.address=userDetails['address'];
+      widget.patientModel.type=userDetails['patient']['type'];
+      widget.patientModel.educationalLevel=userDetails['patient']['education_level'];
+      
+      //print(selectedEL);
+      //print(selectedType);
+    
 
-    if (response.statusCode == 201) {
-      //final Map<String, dynamic> responseData = json.decode(response.body);
-
-      print('SignUp YOLO!!');
-      print(response.body);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-         builder: (context) => PatientHomeScreeen()));
-      final snackBar = SnackBar(content: Text('SinUp succesfuly ,Welcome!'));   
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
-      print(response.body);
+    }else{
       print('error');
-      final snackBar = SnackBar(content: Text(response.body));   
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print(response.body);
     }
   }
 
+  Future userUpdate() async{
+
+    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/user/');
+    String cookie=widget.patientModel.cookie!;
+    String? sessionid;
+    String?csrfToken;
+    if (cookie.contains('sessionid')) {
+    List at = RegExp(r'(sessionid)(.*?)[^;]+').stringMatch(cookie)!.split('=');
+    sessionid = at[1];
+    }
+    if (cookie.contains('csrftoken')) {
+    List at = RegExp(r'(csrftoken)(.*?)[^;]+').stringMatch(cookie)!.split('=');
+    csrfToken = at[1];
+    }
+    
+    print(csrfToken);
+    var data = {
+    //"uid": "a8d5ae59-700b-4e06-bfed-200ea0c17171",
+    "patient": {
+        "pid": widget.patientModel.pid,
+        //"deleted": null,
+        "type": widget.patientModel.type,
+        "education_level": widget.patientModel.educationalLevel,
+        //"is_approved": false
+    },
+    //"last_login": "2021-08-19T12:23:05.723842Z",
+    //"is_superuser": false,
+    "first_name": "alami",
+    "last_name": "boudkhil",
+    //"is_active": true,
+    //"date_joined": "2021-08-17T23:12:45.171997Z",
+    //"deleted": null,
+    "sex": widget.patientModel.sex,
+    "email":widget.patientModel.email,
+    //"role": "Patient",
+    //"image": null,
+    "phone": widget.patientModel.phoneNumber,
+    "date_of_birth": widget.patientModel.dateOfBirth,
+    "city": widget.patientModel.city,
+    "address": widget.patientModel.address,
+    //"is_confirmed": false,
+    //"created_on": "2021-08-17T23:12:45.172284Z"
+};
+    final http.Response response = await http.put(
+      url,
+      headers: {'Authorization':widget.patientModel.token!,"content-type": "application/json",'Cookie': 'csrftoken=$csrfToken;sessionid=$sessionid;','X-CSRFToken':csrfToken!},
+      body: jsonEncode(data)
+      );
+    
+    if(response.statusCode==200){
+      print('YOLO');
+      print(response.body);
+      
+    }else{
+      print('error');
+      print(response.body);
+    }
+  }
+  
+
   @override
   Widget build(BuildContext context) {
-    emailController.text=widget.email;
+    setState(() {
+      userGet().then((value) {
+      firstNameController.text=widget.patientModel.firstName!;
+      lastNameController.text=widget.patientModel.lastName!;
+      userSex=widget.patientModel.sex!;
+       _groupValue= userSex=='Male'?0:1;
+      emailController.text=widget.patientModel.email;
+      phoneNumberController.text=widget.patientModel.phoneNumber!;
+      dateBirthController.text=widget.patientModel.dateOfBirth!;
+      cityController.text=widget.patientModel.city!;
+      addressController.text=widget.patientModel.address!;
+
+      selectedType=widget.patientModel.type!;
+      
+      selectedEL=widget.patientModel.educationalLevel!;
+      print(selectedType);
+      print(selectedEL);
+    });
+    });
+     
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu_rounded,color: Colors.black,size:35),
+        iconTheme:  IconThemeData(color: Colors.black),
         elevation: 8.00,
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -131,16 +201,10 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
         actions: [
           IconButton(
             iconSize: 30,
-            color: Colors.black,
             onPressed: (){}, 
             icon: Icon(Icons.notification_important_rounded)),
           SizedBox(width: 8,),
-          CircleAvatar(
-            radius: 23.00,
-            foregroundImage:AssetImage('assets/images/default_profile.png'),),
-          SizedBox(
-            width: 15,
-          ),
+          
         ],
         
       ),
@@ -247,7 +311,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                           style: TextStyle(fontSize: 25),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 15,
                         ),
                         Expanded(
                           child: RadioListTile(
@@ -257,7 +321,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                             onChanged: (newValue) =>
                                 setState(()  {_groupValue = newValue;userSex='Male';}),
                             activeColor: Colors.blueAccent,
-                            selected: false,
+                            selected: userSex=='Male',
                           ),
                         ),
                         Expanded(
@@ -268,7 +332,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                             onChanged: (newValue) =>
                                 setState(() {_groupValue = newValue;userSex='Female';}),
                             activeColor: Colors.blueAccent,
-                            selected: false,
+                            selected: userSex=='Female',
                           ),
                         ),
                       ],
@@ -447,10 +511,10 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                                 selectedEL = 'NONE';
                               } else if (selectedType == 'Student') {
                                 selectedElList = studentEL;
-                                selectedEL = '1CPI';
+                                selectedEL = '1-CPI';
                               } else {
                                 selectedElList = teacherEL;
-                                selectedEL = 'MA-A';
+                                selectedEL ='MA-A';
                               }
                             });
                           },
@@ -503,7 +567,11 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                     ),
                     defaultButton(
                         function: () {
-                          if(formKey.currentState!.validate()){userUpdate();}
+                          if(formKey.currentState!.validate()){
+                           setState(() {
+                             userUpdate();
+                           });
+                          }
                         },
                         text: 'update',
                         radius: 20,
@@ -514,6 +582,20 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
               ),
             ),
           ),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              
+              child: CircleAvatar(
+                radius:40,
+                foregroundImage: AssetImage('assets/images/logo.png'),
+                backgroundColor: Colors.transparent,
+              ),
+            ),
+          ],
         ),
       ),
     );
