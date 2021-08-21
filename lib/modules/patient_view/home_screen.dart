@@ -105,9 +105,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
                         style: GoogleFonts.oswald(color: Colors.black,fontSize: 25),
                       ),
                       SizedBox(width: 50,),
-                      IconButton(
-                        onPressed: (){}, 
-                        icon: Icon(Icons.arrow_forward_ios_rounded))
+                      Icon(Icons.arrow_forward_ios_rounded)
               
                     ],
                   ),
@@ -139,9 +137,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
                         style: GoogleFonts.oswald(color: Colors.black,fontSize: 25),
                       ),
                       SizedBox(width: 10,),
-                      IconButton(
-                        onPressed: (){}, 
-                        icon: Icon(Icons.arrow_forward_ios_rounded))
+                      Icon(Icons.arrow_forward_ios_rounded)
                     ],
                   ),
                 ),
@@ -172,9 +168,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
                         style: GoogleFonts.oswald(color: Colors.black,fontSize: 25),
                       ),
                       SizedBox(width: 30,),
-                      IconButton(
-                        onPressed: (){}, 
-                        icon: Icon(Icons.arrow_forward_ios_rounded))
+                      Icon(Icons.arrow_forward_ios_rounded)
                     ],
                   ),
                 ),
@@ -202,9 +196,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
                         style: GoogleFonts.oswald(color: Colors.black,fontSize: 25),
                       ),
                       SizedBox(width: 91),
-                      IconButton(
-                        onPressed: (){}, 
-                        icon: Icon(Icons.arrow_back_ios_rounded))
+                      Icon(Icons.arrow_back_ios_rounded)
                     ],
                   ),
                 ),

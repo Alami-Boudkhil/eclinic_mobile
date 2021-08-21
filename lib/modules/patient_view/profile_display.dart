@@ -8,6 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
+import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
+import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
+import 'package:eclinic_mobile/welcome_screen.dart';
 import 'package:intl/intl.dart';
 
 
@@ -165,6 +168,26 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
     }
   }
   
+  Future userlogout()async{
+
+    Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/logout/'); 
+
+    var data = {
+    "key":widget.patientModel.token,
+
+    };
+
+    final http.Response response= await  http.post(url,headers:{ "Accept": "application/json","content-type": "application/json"
+      } ,body: json.encode(data));
+
+    if(response.statusCode==200){
+      print('logout YOLO!!');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => WelcomeScreen())); 
+}
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -587,6 +610,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
       drawer: Drawer(
         child: ListView(
           children: [
+            
             DrawerHeader(
               
               child: CircleAvatar(
@@ -594,6 +618,56 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                 foregroundImage: AssetImage('assets/images/logo.png'),
                 backgroundColor: Colors.transparent,
               ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home,color: Colors.green[600]),
+              title: Text(
+                'Home page',
+                style: TextStyle(fontSize: 20,color: Colors.green[600]),
+                ),
+              onTap: (){
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel, password1: widget.password1))); 
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.description_rounded,color: Colors.green[600]),
+              title: Text(
+                'Medical record',
+                style: TextStyle(fontSize: 20,color: Colors.green[600]),
+                ),
+              onTap: (){
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => MedicalRecordcreen()));
+
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.date_range_rounded,color: Colors.green[600]),
+              title: Text(
+                'Appointments',
+                style: TextStyle(fontSize: 20,color: Colors.green[600]),
+                ),
+              onTap: (){
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => AppointmentsScreen()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_rounded,color: Colors.redAccent[400],),
+              title: Text(
+                'Logout',
+                style: TextStyle(fontSize: 20,color: Colors.redAccent[400]),
+                ),
+              onTap: (){
+                userlogout();
+              },
             ),
           ],
         ),
