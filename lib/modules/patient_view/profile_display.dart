@@ -642,7 +642,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => MedicalRecordcreen()));
+                builder: (context) => MedicalRecordcreen(patientModel: widget.patientModel,password: widget.password1,)));
 
               },
             ),

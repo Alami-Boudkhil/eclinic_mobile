@@ -119,7 +119,7 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
                   Navigator.push(
                   context,
                   MaterialPageRoute(
-                  builder: (context) => MedicalRecordcreen()));              
+                  builder: (context) => MedicalRecordcreen(patientModel: widget.patientModel,password: widget.password1,)));              
                   },
                 child: Container(
                   decoration: BoxDecoration(

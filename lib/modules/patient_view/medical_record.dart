@@ -1,8 +1,46 @@
+import 'dart:convert';
+
+import 'package:eclinic_mobile/models/patient_model.dart';
+import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
+import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
+import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
+import 'package:eclinic_mobile/welcome_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
-class MedicalRecordcreen extends StatelessWidget{
+class MedicalRecordcreen extends StatefulWidget{
+  final PatientModel? patientModel;
+  final String? password;
+  MedicalRecordcreen({required this.patientModel,this.password});
+
+  @override
+  _MedicalRecordcreenState createState() => _MedicalRecordcreenState();
+}
+
+class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
+  Future userlogout()async{
+
+    Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/logout/'); 
+
+    var data = {
+    "key":widget.patientModel!.token,
+
+    };
+
+    final http.Response response= await  http.post(url,headers:{ "Accept": "application/json","content-type": "application/json"
+      } ,body: json.encode(data));
+
+    if(response.statusCode==200){
+      print('logout YOLO!!');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => WelcomeScreen())); 
+}
+  }
+  
   @override
   Widget build(BuildContext context) {
     
@@ -385,6 +423,933 @@ class MedicalRecordcreen extends StatelessWidget{
                   ],),
                 ),
               ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Congenital condition :',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Allergic reactions:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'General:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      Divider(
+                        height: 8,
+                        thickness: 5,
+                        indent: 15,
+                        endIndent: 15,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Wieght:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            'placeHolder ',
+                            style:GoogleFonts.roboto(fontSize: 20), 
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Height:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            'placeHolder ',
+                            style:GoogleFonts.roboto(fontSize: 20), 
+                          )
+                        ],
+                      ),
+                      
+                      Divider(
+                        thickness: 5,
+                        indent: 15,
+                        endIndent: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Hearing:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                        ]
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        
+                        children: [
+                          Text(
+                            'Right:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            'placeHolder ',
+                            style:GoogleFonts.roboto(fontSize: 20), 
+                          )
+
+                        ]
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Left:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            'placeHolder ',
+                            style:GoogleFonts.roboto(fontSize: 20), 
+                          )
+
+                        ]
+                      ),
+                      Divider(
+                        height: 8,
+                        thickness: 5,
+                        indent: 15,
+                        endIndent: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Visual acuity without correction:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Right:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                              "placeholder",
+                              style: GoogleFonts.roboto(fontSize: 20),
+                              )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Left:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                              "placeholder",
+                              style: GoogleFonts.roboto(fontSize: 20),
+                              )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Visual acuity with correction:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Right:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                              "placeholder",
+                              style: GoogleFonts.roboto(fontSize: 20),
+                              )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Left:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                              "placeholder",
+                              style: GoogleFonts.roboto(fontSize: 20),
+                              )
+                        ],
+                      ),  
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Skin state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Skin exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Ophtalmological state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Ophtalmological exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Orl state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Orl exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Locomotor state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Locomotor exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Respiratory state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Respiratory exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Cardiovascular state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Cardiovascular exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Digestive state:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Digestive exam:',
+                            style: GoogleFonts.oswald(fontSize: 25),
+                          ),
+                          
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                      
+                  ],),
+                ),
+              ),
+              SizedBox(height: 16,),
+              Card(
+                elevation: 5,
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // if you need this
+                side: BorderSide(
+                color: Colors.blue.withOpacity(0.2),
+                width: 2,
+                ),
+                  ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8,
+                    bottom: 8
+                  ),
+                  child: Column(
+                    
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Aptitude:',
+                            style: GoogleFonts.oswald(fontSize:25 ),
+                          ),
+                          Icon(Icons.check_circle),
+                          Icon(Icons.indeterminate_check_box_rounded),
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Reason:',
+                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
+                          ),
+                          SizedBox(width: 5,),
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Orientation specialist:',
+                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
+                          ),
+                          SizedBox(width: 5,),
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffff',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Orientation cause:',
+                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
+                          ),
+                          SizedBox(width: 5,),
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffff',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'Orientation response:',
+                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
+                          ),
+                          SizedBox(width: 5,),
+                          Expanded(
+                            child: Text(
+                              'placeHffffffffffffffff',
+                              textAlign: TextAlign.justify,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style:GoogleFonts.roboto(fontSize: 20), 
+                            ),
+                          )
+                        ],
+                      ),
+
+                      
+                  ],),
+                ),
+              ),
             ],
           ),
         ),
@@ -408,23 +1373,23 @@ class MedicalRecordcreen extends StatelessWidget{
                 style: TextStyle(fontSize: 20,color: Colors.green[600]),
                 ),
               onTap: (){
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                // builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel, password1: widget.password1))); 
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                 builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel!, password1: widget.password!))); 
               },
             ),
             ListTile(
-              leading: Icon(Icons.description_rounded,color: Colors.green[600]),
+              leading: Icon(Icons.person,color: Colors.green[600]),
               title: Text(
-                'Medical record',
+                'Your Profile',
                 style: TextStyle(fontSize: 20,color: Colors.green[600]),
                 ),
               onTap: (){
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                // builder: (context) => MedicalRecordcreen()));
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => DisplayProfiletScreeen(patientModel: widget.patientModel!, password1: widget.password!)));
 
               },
             ),
@@ -435,10 +1400,10 @@ class MedicalRecordcreen extends StatelessWidget{
                 style: TextStyle(fontSize: 20,color: Colors.green[600]),
                 ),
               onTap: (){
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                // builder: (context) => AppointmentsScreen()));
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => AppointmentsScreen()));
               },
             ),
             ListTile(
@@ -448,7 +1413,7 @@ class MedicalRecordcreen extends StatelessWidget{
                 style: TextStyle(fontSize: 20,color: Colors.redAccent[400]),
                 ),
               onTap: (){
-                //userlogout();
+                userlogout();
               },
             ),
           ],
