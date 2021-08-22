@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eclinic_mobile/models/patient_model.dart';
+import 'package:eclinic_mobile/models/medical_record_model.dart';
 import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
@@ -20,6 +21,8 @@ class MedicalRecordcreen extends StatefulWidget{
 }
 
 class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
+  MedicalRecordModel? medicalRecordModel;
+
   Future userlogout()async{
 
     Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/logout/'); 
@@ -40,7 +43,34 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
         builder: (context) => WelcomeScreen())); 
 }
   }
-  
+  Future getMedicalRecord()async{
+
+    Uri url=Uri.parse('http://10.0.2.2:8000/api-medical/patient_medical_record/'); 
+    String cookie=widget.patientModel!.cookie!;
+    String? sessionid;
+    
+    if (cookie.contains('sessionid')) {
+      List at = RegExp(r'(sessionid)(.*?)[^;]+').stringMatch(cookie)!.split('=');
+      sessionid = at[1];
+    }
+    print(widget.patientModel!.cookie);
+    print(widget.patientModel!.token);
+    print(sessionid);
+    final http.Response response = await http.get(
+      url,
+      headers: {'Authorization':widget.patientModel!.token!,'Cookie': 'sessionid=$sessionid;'}
+      );
+
+    if(response.statusCode==200){
+      print('YOLO');
+      medicalRecordModel= new MedicalRecordModel();
+      medicalRecordModel!.fromJson(jsonDecode(response.body));
+    }else{
+      print('error');
+      print(response.body);
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     
