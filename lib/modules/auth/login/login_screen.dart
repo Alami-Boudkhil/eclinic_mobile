@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import "package:eclinic_mobile/shared/components.dart";
+import "package:eclinic_mobile/shared/api_provider.dart";
 import 'package:eclinic_mobile/modules/auth/sign_up/signup_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
@@ -26,54 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   late PatientModel patientModel;
   bool isObsecure=true;
-
-  Future userlogin()async{
-
-    Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/login/'); 
-
-    var data = {
-    "username": "",
-    "email": emailController.text,
-    "password": passwordController.text,
-    };
-
-    final http.Response response= await  http.post(url,headers:{ "Accept": "application/json","content-type": "application/json"
-      } ,body: json.encode(data));
-
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    
-
-    if(response.statusCode==200)
-    {
-      patientModel=new PatientModel(
-        email: emailController.text,
-        token: responseData['key'],
-        cookie: response.headers['set-cookie']
-        );
-        
-      print(patientModel.cookie);
-      print('login YOLO!!');
-      print('Token:'+patientModel.token!);
-      Navigator.push(
-        context, 
-        MaterialPageRoute(builder :(context)=> PatientHomeScreeen(patientModel: patientModel ,password1: passwordController.text,)));
-      final snackBar = SnackBar(content: Text('Loged IN succesfuly ,Welcome!'));   
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-    }
-    else if (response.statusCode==400)
-    {
-      print('can\'t login');
-      print(response.body);
-      showDialog(
-              context: context,
-              builder: (BuildContext context) => buildPopupDialog(
-                context,title:'invalid credentials',
-                msg: 'email or password are wrong!',),
-            );
-    }
-   
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +147,47 @@ class _LoginScreenState extends State<LoginScreen> {
                   function: (){
                     if(formKey.currentState!.validate())
                     {
-                    userlogin();
+                    ApiProvider.userlogin(email: emailController.text,password: passwordController.text).then((value)  {
+                       final Map<String, dynamic> responseData = json.decode(value.body);
+                       if(value.statusCode==200)
+                        {
+                          patientModel=new PatientModel(
+                            email: emailController.text,
+                            token: responseData['key'],
+                            cookie: value.headers['set-cookie']
+                          );
+        
+                        print(patientModel.cookie);
+                        print('login YOLO!!');
+                        print('Token:'+patientModel.token!);
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder :(context)=> PatientHomeScreeen(patientModel: patientModel)));
+                        final snackBar = SnackBar(content: Text('Loged IN succesfuly ,Welcome!'));   
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                      
+                        }else if(responseData["non_field_errors"][0]=="E-mail is not verified.") {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => buildPopupDialog(
+                                  context,title:'Unverified Email',
+                                  msg: 'Please verify your Email and try to login again(a confirmation email was sent to you)',),
+                              );
+                        }else{
+                          
+                          print('can\'t login');
+                          print(value.body);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => buildPopupDialog(
+                            context,title:'invalid credentials',
+                            msg: 'email or password are wrong!',),
+                          );
+                        }
+   
+                    }
+                     );
                     }
                    
                   },

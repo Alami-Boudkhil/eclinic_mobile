@@ -2,9 +2,9 @@
 
 class MedicalRecordModel {
   //int? id;
-  //Map<String,dynamic>? patientData;
+  Map<String,dynamic>? patientData;
   String? patient;
-  String? socialID;
+  int? socialID;
   String? biometricID;
   bool? tobacoConsumption;
   String? tobacoTakenAs;
@@ -46,7 +46,7 @@ class MedicalRecordModel {
   String? orientationResponse;
 
   MedicalRecordModel({
-    //this.patientData,
+    this.patientData,
     this.patient,
     this.socialID,
     this.biometricID,
@@ -93,7 +93,7 @@ class MedicalRecordModel {
 
   MedicalRecordModel? fromJson(Map<String,dynamic>json){
     //id=json['id'];
-    //patientData=['patient_data'];
+    patientData=json["patient_data"];
     patient=json["patient"];
     socialID=json["social_number"];
     biometricID=json["biometric"];

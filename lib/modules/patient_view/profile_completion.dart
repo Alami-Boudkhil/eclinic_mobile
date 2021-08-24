@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:eclinic_mobile/models/patient_model.dart';
+import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
+import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
@@ -49,72 +51,6 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
   final dateBirthController = TextEditingController();
   final cityController = TextEditingController();
   final addressController = TextEditingController();
-  
-  Future usersignup() async {
-    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/registration/');
-
-    var data = {
-      "user": {
-        "password1": widget.password1,
-        "password2": widget.password2,
-        "last_login": null,
-        "is_superuser": false,
-        "first_name": firstNameController.text,
-        "last_name": lastNameController.text,
-        "is_active": false,
-        "date_joined": DateTime.now().toString(),
-        "sex": userSex,
-        "email":emailController.text,
-        "role": "Patient",
-        "image": null,
-        "phone": phoneNumberController.text,
-        "date_of_birth": dateBirthController.text,
-        "city": cityController.text,
-        "address": addressController.text,
-        "is_confirmed": false
-      },
-      "type": selectedType,
-      "education_level": selectedEL,
-      "is_approved": false,
-    };
-
-    final http.Response response = await http.post(url,
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
-        body: json.encode(data));
-
-    if (response.statusCode == 201) {
-      //final Map<String, dynamic> responseData = json.decode(response.body);
-      PatientModel patientModel=new PatientModel(
-        pid: '',
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
-        sex: userSex,
-        email: widget.email,
-        phoneNumber: phoneNumberController.text,
-        dateOfBirth: dateBirthController.text,
-        city: cityController.text,
-        address: addressController.text,
-        type: selectedType,
-        educationalLevel: selectedEL,
-        );
-      print('SignUp YOLO!!');
-      print(response.body);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-         builder: (context) => PatientHomeScreeen(patientModel: patientModel, password1: widget.password1,)));
-      final snackBar = SnackBar(content: Text('SinUp succesfuly ,Welcome!'));   
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
-      print(response.body);
-      print('error');
-      final snackBar = SnackBar(content: Text(response.body));   
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -442,7 +378,45 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                     ),
                     defaultButton(
                         function: () {
-                          if(formKey.currentState!.validate()){usersignup();}
+                          if(formKey.currentState!.validate()){
+                            ApiProvider.usersignup(
+                              password1:widget.password1 ,
+                              password2: widget.password2,
+                              firstName: firstNameController.text,
+                              lasttName: lastNameController.text,
+                              sex: userSex,
+                              email: emailController.text,
+                              phone: phoneNumberController.text,
+                              dateOfBirth: dateBirthController.text,
+                              city: cityController.text,
+                              address: addressController.text,
+                              type: selectedType,
+                              educationLevel: selectedEL,
+                            ).then((value){
+                              
+                            if (value.statusCode == 201) {
+                          
+                              print('SignUp YOLO!!');
+                              print(value.body);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => buildPopupDialog(
+                                  context,title:'Sign UP completed, Welcome',
+                                  msg: 'A confirmation Email was sent to you ,please verify your email and login again',),
+                              );
+                            }else {
+                              print(value.body);
+                              print('error');
+                              final snackBar = SnackBar(content: Text(value.body));   
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+
+                            });
+                          }
                         },
                         text: 'complete your profile',
                         radius: 20,

@@ -5,16 +5,16 @@ import 'package:eclinic_mobile/models/medical_record_model.dart';
 import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
+import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:eclinic_mobile/welcome_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 
 class MedicalRecordcreen extends StatefulWidget{
-  final PatientModel? patientModel;
-  final String? password;
-  MedicalRecordcreen({required this.patientModel,this.password});
+  
+  final PatientModel patientModel;
+  MedicalRecordcreen({required this.patientModel});
 
   @override
   _MedicalRecordcreenState createState() => _MedicalRecordcreenState();
@@ -22,59 +22,43 @@ class MedicalRecordcreen extends StatefulWidget{
 
 class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
   MedicalRecordModel? medicalRecordModel;
-
-  Future userlogout()async{
-
-    Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/logout/'); 
-
-    var data = {
-    "key":widget.patientModel!.token,
-
-    };
-
-    final http.Response response= await  http.post(url,headers:{ "Accept": "application/json","content-type": "application/json"
-      } ,body: json.encode(data));
-
-    if(response.statusCode==200){
-      print('logout YOLO!!');
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-        builder: (context) => WelcomeScreen())); 
-}
-  }
-  Future getMedicalRecord()async{
-
-    Uri url=Uri.parse('http://10.0.2.2:8000/api-medical/patient_medical_record/'); 
-    String cookie=widget.patientModel!.cookie!;
-    String? sessionid;
-    
-    if (cookie.contains('sessionid')) {
-      List at = RegExp(r'(sessionid)(.*?)[^;]+').stringMatch(cookie)!.split('=');
-      sessionid = at[1];
-    }
-    print(widget.patientModel!.cookie);
-    print(widget.patientModel!.token);
-    print(sessionid);
-    final http.Response response = await http.get(
-      url,
-      headers: {'Authorization':widget.patientModel!.token!,'Cookie': 'sessionid=$sessionid;'}
-      );
-
-    if(response.statusCode==200){
-      print('YOLO');
-      medicalRecordModel= new MedicalRecordModel();
-      medicalRecordModel!.fromJson(jsonDecode(response.body));
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ApiProvider.getMedicalRecord(token: widget.patientModel.token!).then((value) {
+      if(value.statusCode==200){
+        setState(() {
+          final Map<String, dynamic> responseData = json.decode(value.body);
+          print('YOLO getGedicalRecord');
+          //print(widget.patientModel.token);
+          //print(responseData["patient_data"]);
+          medicalRecordModel = new MedicalRecordModel();
+          medicalRecordModel!.fromJson(responseData);
+      
+          //print("inside: "+medicalRecordModel!.patientData.toString());
+        });
+      
     }else{
       print('error');
-      print(response.body);
+      print(value.body);
 
     }
+    });
   }
   @override
   Widget build(BuildContext context) {
     
+    if(medicalRecordModel==null){
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Loading..."),
+        ),
+      );
+    }else{
+    //print("debug:"+medicalRecordModel!.allergicReaction.toString() );
     return Scaffold(
+      
       appBar: AppBar(
         
         iconTheme:  IconThemeData(color: Colors.black),
@@ -136,7 +120,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.patientData!["user"]["first_name"],
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -150,7 +134,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel?.patientData?["user"]["last_name"],
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -164,7 +148,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel?.patientData?["education_level"],
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -178,7 +162,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.socialID.toString(),
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -192,7 +176,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.biometricID!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -242,8 +226,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          Icon(Icons.check_circle),
-                          Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel?.tobacoConsumption==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),                      
                         ],
                       ),
                       SizedBox(height: 8,),
@@ -255,7 +238,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.tobacoTakenAs!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -269,7 +252,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.numberUnits.toString(),
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -286,8 +269,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          Icon(Icons.check_circle),
-                          Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel!.alcoholConsumption==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),
+                          
                         ],
                       ),
                       Divider(
@@ -303,8 +286,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          Icon(Icons.check_circle),
-                          Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel!.medicationConsumption==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),
+                          
                         ],
                       ),
                       SizedBox(height: 8,),
@@ -317,7 +300,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                                "placeholder",
+                                medicalRecordModel!.medications!,
                                 textAlign: TextAlign.justify,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.roboto(fontSize: 20),
@@ -339,9 +322,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Expanded(
-                            child: Text(
-                              'placeholder :',
-                              textAlign: TextAlign.justify,
+                            child: Text(                         
+                              medicalRecordModel!.other!,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.roboto(fontSize: 20),
@@ -360,7 +342,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                 elevation: 5,
                 color: Colors.blue[50],
                 shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // if you need this
+                borderRadius: BorderRadius.circular(20), 
                 side: BorderSide(
                 color: Colors.blue.withOpacity(0.2),
                 width: 2,
@@ -386,12 +368,13 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       ),
                       SizedBox(height: 8,),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.generalDiseases!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -435,12 +418,13 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       ),
                       SizedBox(height: 8,),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.surgicalIntervention!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -484,12 +468,13 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       ),
                       SizedBox(height: 8,),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.congenitalCondition!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -533,12 +518,14 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       ),
                       SizedBox(height: 8,),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              
+                              medicalRecordModel!.allergicReaction!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -594,7 +581,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.wieght!.substring(0,5)+" Kg",
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -608,7 +595,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.height!.substring(0,5)+" cm",
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -638,7 +625,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.hearingRight!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
 
@@ -653,7 +640,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            'placeHolder ',
+                            medicalRecordModel!.hearingLeft!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
 
@@ -683,7 +670,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                              "placeholder",
+                              medicalRecordModel!.visualAcuityWithoutCorrectionRight!,
                               style: GoogleFonts.roboto(fontSize: 20),
                               )
                         ],
@@ -697,7 +684,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                              "placeholder",
+                              medicalRecordModel!.visualAcuityWithoutCorrectionLeft!,
                               style: GoogleFonts.roboto(fontSize: 20),
                               )
                         ],
@@ -722,7 +709,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                              "placeholder",
+                              medicalRecordModel!.visualAcuityWithCorrectionRight!,
                               style: GoogleFonts.roboto(fontSize: 20),
                               )
                         ],
@@ -736,7 +723,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                              "placeholder",
+                              medicalRecordModel!.visualAcuityWithCorrectionLeft!,
                               style: GoogleFonts.roboto(fontSize: 20),
                               )
                         ],
@@ -779,7 +766,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              "- "+medicalRecordModel!.skinState!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -805,8 +792,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.skinExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -854,7 +841,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              '- '+medicalRecordModel!.ophtalmologicalState!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -880,8 +867,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.ophtalmologicalExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -929,7 +916,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              '- '+medicalRecordModel!.orlState!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -955,8 +942,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.orlExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1004,7 +991,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              '- '+medicalRecordModel!.locomotorCase!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -1030,8 +1017,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.locomotorExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1049,7 +1036,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                 elevation: 5,
                 color: Colors.blue[50],
                 shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // if you need this
+                borderRadius: BorderRadius.circular(20), 
                 side: BorderSide(
                 color: Colors.blue.withOpacity(0.2),
                 width: 2,
@@ -1079,7 +1066,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              '- '+medicalRecordModel!.respiratoryState!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -1105,8 +1092,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.respiratoryExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1154,7 +1141,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              '- '+medicalRecordModel!.cardiovascularState!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -1180,8 +1167,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.cardiovascularExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1229,7 +1216,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
+                              '- '+medicalRecordModel!.digestiveState!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -1255,8 +1242,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.digestiveExam!,
+                              textAlign: TextAlign.center,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1295,8 +1282,9 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                             'Aptitude:',
                             style: GoogleFonts.oswald(fontSize:25 ),
                           ),
-                          Icon(Icons.check_circle),
-                          Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel!.aptitude==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),
+                          
+                          
                         ],
                       ),
                       SizedBox(height: 8,),
@@ -1309,8 +1297,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffolder ',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.reason!,
+                              
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1328,8 +1316,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffff',
-                              textAlign: TextAlign.justify,
+                              medicalRecordModel!.orientationSpecialist!,
+                              
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1347,7 +1335,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffff',
+                              "- "+medicalRecordModel!.orientationCause!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -1366,7 +1354,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                              'placeHffffffffffffffff',
+                              medicalRecordModel!.orientationResponse!,
                               textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
@@ -1384,6 +1372,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
           ),
         ),
       ),
+      
       drawer: Drawer(
         child: ListView(
           children: [
@@ -1406,7 +1395,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                 builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel!, password1: widget.password!))); 
+                 builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel))); 
               },
             ),
             ListTile(
@@ -1419,7 +1408,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => DisplayProfiletScreeen(patientModel: widget.patientModel!, password1: widget.password!)));
+                builder: (context) => DisplayProfiletScreeen(patientModel: widget.patientModel)));
 
               },
             ),
@@ -1443,12 +1432,24 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                 style: TextStyle(fontSize: 20,color: Colors.redAccent[400]),
                 ),
               onTap: (){
-                userlogout();
+                ApiProvider.userlogout(token: widget.patientModel.token!).then((value) {
+                  if(value.statusCode==200){
+                      print(widget.patientModel.token);
+                      print('logout YOLO!!');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen())); 
+                    }
+                });
               },
             ),
           ],
         ),
       ),
     );
-  }
+    }
+    }
+   
+  
 }

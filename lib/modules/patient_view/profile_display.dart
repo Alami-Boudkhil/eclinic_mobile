@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:eclinic_mobile/models/patient_model.dart';
+import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
@@ -16,11 +17,10 @@ import 'package:intl/intl.dart';
 
 class DisplayProfiletScreeen extends StatefulWidget {
   PatientModel patientModel;
-  String password1;
-  String? password2;
+  
 
   DisplayProfiletScreeen(
-      { required this.patientModel,  required this.password1,  this.password2});
+      { required this.patientModel});
   @override
   _DisplayProfiletScreeenState createState() => _DisplayProfiletScreeenState();
 }
@@ -65,149 +65,52 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
   bool editAddress=false;
   
   
-  Future userGet()async{
-    
-    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/user/');
-    String cookie=widget.patientModel.cookie!;
-    String? sessionid;
-    if (cookie.contains('sessionid')) {
-    List at = RegExp(r'(sessionid)(.*?)[^;]+').stringMatch(cookie)!.split('=');
-    sessionid = at[1];
-  }
-    print(widget.patientModel.cookie);
-    print(widget.patientModel.token);
-    print(sessionid);
-    final http.Response response = await http.get(
-      url,
-      headers: {'Authorization':widget.patientModel.token!,'Cookie': 'sessionid=$sessionid;'}
-      );
-
-    if(response.statusCode==200){
-
-      print('YOLO');
-      Map<String,dynamic> userDetails=jsonDecode(response.body);
-      
-      widget.patientModel.pid=userDetails['patient']['pid'];
-      widget.patientModel.firstName=userDetails['first_name'];
-      widget.patientModel.lastName=userDetails['last_name'];
-      widget.patientModel.sex=userDetails['sex'];
-      widget.patientModel.email=userDetails['email'];
-      widget.patientModel.phoneNumber=userDetails['phone'];
-      widget.patientModel.dateOfBirth=userDetails['date_of_birth'];
-      widget.patientModel.city=userDetails['city'];
-      widget.patientModel.address=userDetails['address'];
-      widget.patientModel.type=userDetails['patient']['type'];
-      widget.patientModel.educationalLevel=userDetails['patient']['education_level'];
-      
-      //print(selectedEL);
-      //print(selectedType);
-    
-
-    }else{
-      print('error');
-      print(response.body);
-    }
-  }
-
-  Future userUpdate() async{
-
-    Uri url = Uri.parse('http://10.0.2.2:8000/rest-auth/user/');
-    String cookie=widget.patientModel.cookie!;
-    String? sessionid;
-    String?csrfToken;
-    if (cookie.contains('sessionid')) {
-    List at = RegExp(r'(sessionid)(.*?)[^;]+').stringMatch(cookie)!.split('=');
-    sessionid = at[1];
-    }
-    if (cookie.contains('csrftoken')) {
-    List at = RegExp(r'(csrftoken)(.*?)[^;]+').stringMatch(cookie)!.split('=');
-    csrfToken = at[1];
-    }
-    
-    print(csrfToken);
-    var data = {
-    //"uid": "a8d5ae59-700b-4e06-bfed-200ea0c17171",
-    "patient": {
-        "pid": widget.patientModel.pid,
-        //"deleted": null,
-        "type": widget.patientModel.type,
-        "education_level": widget.patientModel.educationalLevel,
-        //"is_approved": false
-    },
-    //"last_login": "2021-08-19T12:23:05.723842Z",
-    //"is_superuser": false,
-    "first_name": "alami",
-    "last_name": "boudkhil",
-    //"is_active": true,
-    //"date_joined": "2021-08-17T23:12:45.171997Z",
-    //"deleted": null,
-    "sex": widget.patientModel.sex,
-    "email":widget.patientModel.email,
-    //"role": "Patient",
-    //"image": null,
-    "phone": widget.patientModel.phoneNumber,
-    "date_of_birth": widget.patientModel.dateOfBirth,
-    "city": widget.patientModel.city,
-    "address": widget.patientModel.address,
-    //"is_confirmed": false,
-    //"created_on": "2021-08-17T23:12:45.172284Z"
-};
-    final http.Response response = await http.put(
-      url,
-      headers: {'Authorization':widget.patientModel.token!,"content-type": "application/json",'Cookie': 'csrftoken=$csrfToken;sessionid=$sessionid;','X-CSRFToken':csrfToken!},
-      body: jsonEncode(data)
-      );
-    
-    if(response.statusCode==200){
-      print('YOLO');
-      print(response.body);
-      
-    }else{
-      print('error');
-      print(response.body);
-    }
-  }
-  
-  Future userlogout()async{
-
-    Uri url=Uri.parse('http://10.0.2.2:8000/rest-auth/logout/'); 
-
-    var data = {
-    "key":widget.patientModel.token,
-
-    };
-
-    final http.Response response= await  http.post(url,headers:{ "Accept": "application/json","content-type": "application/json"
-      } ,body: json.encode(data));
-
-    if(response.statusCode==200){
-      print('logout YOLO!!');
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-        builder: (context) => WelcomeScreen())); 
-}
-    }
-
   @override
   Widget build(BuildContext context) {
     setState(() {
-      userGet().then((value) {
-      firstNameController.text=widget.patientModel.firstName!;
-      lastNameController.text=widget.patientModel.lastName!;
-      userSex=widget.patientModel.sex!;
-       _groupValue= userSex=='Male'?0:1;
-      emailController.text=widget.patientModel.email;
-      phoneNumberController.text=widget.patientModel.phoneNumber!;
-      dateBirthController.text=widget.patientModel.dateOfBirth!;
-      cityController.text=widget.patientModel.city!;
-      addressController.text=widget.patientModel.address!;
+      ApiProvider.userGet(token:widget.patientModel.token!).then((value) {
+        
+        if(value.statusCode==200){
 
-      selectedType=widget.patientModel.type!;
+         print('YOLO get user');
+         Map<String,dynamic> userDetails=jsonDecode(value.body);
       
-      selectedEL=widget.patientModel.educationalLevel!;
-      print(selectedType);
-      print(selectedEL);
+         widget.patientModel.pid=userDetails['patient']['pid'];
+         widget.patientModel.firstName=userDetails['first_name'];
+         widget.patientModel.lastName=userDetails['last_name'];
+         widget.patientModel.sex=userDetails['sex'];
+         widget.patientModel.email=userDetails['email'];
+         widget.patientModel.phoneNumber=userDetails['phone'];
+         widget.patientModel.dateOfBirth=userDetails['date_of_birth'];
+         widget.patientModel.city=userDetails['city'];
+         widget.patientModel.address=userDetails['address'];
+         widget.patientModel.type=userDetails['patient']['type'];
+         widget.patientModel.educationalLevel=userDetails['patient']['education_level'];
+      
+         //print(selectedEL);
+         //print(selectedType);
+    
+
+        }else{
+          print('error');
+          print(value.body);
+        }
+
+        firstNameController.text=widget.patientModel.firstName!;
+        lastNameController.text=widget.patientModel.lastName!;
+        userSex=widget.patientModel.sex!;
+        _groupValue= userSex=='Male'?0:1;
+        emailController.text=widget.patientModel.email;
+        phoneNumberController.text=widget.patientModel.phoneNumber!;
+        dateBirthController.text=widget.patientModel.dateOfBirth!;
+        cityController.text=widget.patientModel.city!;
+        addressController.text=widget.patientModel.address!;
+
+        selectedType=widget.patientModel.type!;
+      
+        selectedEL=widget.patientModel.educationalLevel!;
+        //print(selectedType);
+        //print(selectedEL);
     });
     });
      
@@ -591,9 +494,30 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                     defaultButton(
                         function: () {
                           if(formKey.currentState!.validate()){
-                           setState(() {
-                             userUpdate();
-                           });
+                           
+                             ApiProvider.userUpdate(
+                                token: widget.patientModel.token!,
+                                firstName: firstNameController.text,
+                                lasttName: lastNameController.text,
+                                sex:userSex,
+                                email: emailController.text,
+                                phone: phoneNumberController.text,
+                                dateOfBirth: dateBirthController.text,
+                                city: cityController.text,
+                                address: addressController.text,
+                                type: selectedType,
+                                educationLevel: selectedEL,
+                             ).then((value){
+                                  if(value.statusCode==200){
+                                    print('YOLO');
+                                    print(value.body);
+      
+                                  }else{
+                                    print('error');
+                                    print(value.body);
+                                  }
+                             });
+                           
                           }
                         },
                         text: 'update',
@@ -629,7 +553,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel, password1: widget.password1))); 
+                builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel))); 
               },
             ),
             ListTile(
@@ -642,7 +566,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => MedicalRecordcreen(patientModel: widget.patientModel,password: widget.password1,)));
+                builder: (context) => MedicalRecordcreen(patientModel: widget.patientModel)));
 
               },
             ),
@@ -666,7 +590,16 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                 style: TextStyle(fontSize: 20,color: Colors.redAccent[400]),
                 ),
               onTap: (){
-                userlogout();
+                ApiProvider.userlogout(token: widget.patientModel.token!).then((value) {
+                  if(value.statusCode==200){
+                      print(widget.patientModel.token!);
+                      print('logout YOLO!!');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen())); 
+                    }
+                });
               },
             ),
           ],
