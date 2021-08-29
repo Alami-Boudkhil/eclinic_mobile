@@ -24,115 +24,107 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                child: Stack(
-                  alignment: AlignmentDirectional.centerStart,
-                  children: [
-                    Image(
-                      image: AssetImage('assets/images/shape.png'),
-                    ),
-                    Positioned(
-                      width: 180,
-                      top: 80.00,
-                      left: 40.00,
-                      child: Text(
-                        'Hello',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.00,
-                          fontWeight: FontWeight.w600,
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 9,
+                  child: Container(
+                    width: double.infinity,
+                    child: Stack(
+                      alignment: AlignmentDirectional.centerStart,
+                      children: [
+                        Image(
+                          image: AssetImage('assets/images/shape.png'),
                         ),
-                        textWidthBasis: TextWidthBasis.longestLine,
-                      ),
-                    ),
-                    Positioned(
-                      top: 110.00,
-                      left: 40.00,
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 30.00,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      height: 225.00,
-                      width: 225.00,
-                      top: 120.00,
-                      left: 180.00,
-                      child: Image(
-                        image: AssetImage('assets/images/logoBW.png'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10.00,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40.00,
-                  vertical: 20.00,
-                ),
-                child: defaultFormField(
-                  controller: emailController,
-                  type: TextInputType.emailAddress,
-                  label: 'Email',
-                  prefix: Icons.email_rounded,
-                  validate: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Email must not be empty';
-                    } else if (!value.toString().contains('@esi-sba')) {
-                      return 'Only ESI-Sba emails are accepted';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40.00,
-                  vertical: 20.00,
-                ),
-                child: defaultFormField(
-                  controller: passwordController,
-                  type: TextInputType.visiblePassword,
-                  label: 'Password',
-                  prefix: Icons.lock_clock_rounded,
-                  isPassword: isObsecure1,
-                  suffix: IconButton(
-                    icon: isObsecure1
-                        ? Icon(Icons.visibility_rounded)
-                        : Icon(
-                            Icons.visibility_off_rounded,
+                        Positioned(
+                          width: 180,
+                          top: 80.00,
+                          left: 40.00,
+                          child: Text(
+                            'Hello',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.00,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textWidthBasis: TextWidthBasis.longestLine,
                           ),
-                    onPressed: () {
-                      setState(() {
-                        isObsecure1 = !isObsecure1;
-                      });
-                    },
+                        ),
+                        Positioned(
+                          top: 110.00,
+                          left: 40.00,
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 30.00,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Image(
+                            height: 200,
+                            width: 200,
+                            image: AssetImage('assets/images/logoBW.png'),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  validate: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'password must not be empty';
-                    }
-                    return null;
-                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40.00,
-                  vertical: 20.00,
-                ),
-                child: defaultFormField(
+                Expanded(
+                  flex: 11,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20) ,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          defaultFormField(
+                            controller: emailController,
+                            type: TextInputType.emailAddress,
+                            label: 'Email',
+                            prefix: Icons.email_rounded,
+                            validate: (value) {
+                            if (value.toString().isEmpty) {
+                              setState(() {  });
+                              return 'Email must not be empty';
+                            } else if (!value.toString().contains('@esi-sba')) {
+                              return 'Only ESI-Sba emails are accepted';
+                            }
+                            return null;
+                            },
+                          ),
+                          defaultFormField(
+                            controller: passwordController,
+                            type: TextInputType.visiblePassword,
+                            label: 'Password',
+                            prefix: Icons.lock_clock_rounded,
+                            isPassword: isObsecure1,
+                            suffix: IconButton(
+                             icon: isObsecure1
+                              ? Icon(Icons.visibility_rounded)
+                              : Icon(
+                              Icons.visibility_off_rounded,
+                                ),
+                            onPressed: () {
+                              setState(() {
+                                isObsecure1 = !isObsecure1;
+                              });
+                            },
+                            ),
+                            validate: (value) {
+                              if (value.toString().isEmpty) {
+                              return 'password must not be empty';
+                              }
+                               return null;
+                            },
+                          ),               
+                          defaultFormField(
                     controller: passwordConfirmationController,
                     type: TextInputType.visiblePassword,
                     label: 'Confirm Password',
@@ -151,21 +143,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
                     validate: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'password confirmation required';
-                      } else if (passwordController.text !=
+                      if (passwordController.text !=
                           passwordConfirmationController.text) {
                         return 'confirmation didn\'t match password';
                       }
                       return null;
                     }),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40.00,
-                  vertical: 20.00,
-                ),
-                child: defaultButton(
+                          defaultButton(
                   function: () {
                     if (formKey.currentState!.validate()) {
                       Navigator.push(
@@ -182,35 +166,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   radius: 20.00,
                   background: Colors.blue[800],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Already have an account?",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                  TextButton(
-                    child: Text(
-                      'Login',
+                          Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account?",
                       style: TextStyle(
-                          fontSize: 18.00,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.blue),
+                        fontSize: 18.0,
+                        color: Colors.grey[700],
+                      ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()));
-                    },
-                  ),
-                ],
-              ),
-            ],
+                    TextButton(
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                            fontSize: 18.00,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
+                      },
+                    ),
+                  ],
+                ),
+             
+                       ],
+
+                    ),
+                    ),
+                ),
+                
+              ],
+            ),
           ),
         ),
       ),

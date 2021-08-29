@@ -355,7 +355,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                       height: 20,
                     ),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 200),
+                      padding: const EdgeInsetsDirectional.only(end: 150),
                       child: defaultFormField(
                         suffix: IconButton(
                               onPressed: (){
@@ -580,7 +580,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => AppointmentsScreen()));
+                builder: (context) => AppointmentsScreen(patientModel: widget.patientModel,)));
               },
             ),
             ListTile(

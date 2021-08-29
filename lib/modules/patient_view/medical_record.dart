@@ -52,7 +52,16 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
     if(medicalRecordModel==null){
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Loading..."),
+          title: new Text("Network error"),
+        ),
+        body:Center(
+          child: TextButton(
+            child: Text('Try again'),
+            onPressed: (){
+              setState(() {
+                
+              });
+             }),
         ),
       );
     }else{
@@ -1422,7 +1431,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => AppointmentsScreen()));
+                builder: (context) => AppointmentsScreen(patientModel: widget.patientModel,)));
               },
             ),
             ListTile(

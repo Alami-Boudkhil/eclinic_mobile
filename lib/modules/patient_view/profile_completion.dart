@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:eclinic_mobile/models/patient_model.dart';
+
 import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
 import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,7 @@ import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
+
 import 'package:intl/intl.dart';
 
 
@@ -303,7 +301,7 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                           style: TextStyle(fontSize: 20),
                         ),
                         SizedBox(
-                          width: 30,
+                          width: 15,
                         ),
                         DropdownButton(
                           style:
@@ -348,7 +346,7 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                           style: TextStyle(fontSize: 20),
                         ),
                         SizedBox(
-                          width: 30,
+                          width: 15,
                         ),
                         DropdownButton(
                           style:
