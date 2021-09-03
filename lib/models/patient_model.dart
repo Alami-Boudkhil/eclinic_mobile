@@ -52,21 +52,4 @@ class PatientModel{
     educationalLevel=json['education_level'];
   }
 
-  Map<String, dynamic> toJson(){
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['pid']=this.pid;
-    data['first_name']=this.firstName;
-    data['last_name']=this.lastName;
-    data['sex']=this.sex;
-    data['email']=this.email;
-    data['image']=this.image;
-    data['phone']=this.phoneNumber;
-    data['date_of_birth']=this.dateOfBirth;
-    data['city']=this.city;
-    data['address']=this.address;
-    data['type']=this.type;
-    data['education_level']=this.educationalLevel;
-
-    return data;
-  }
 }

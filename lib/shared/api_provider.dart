@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -174,6 +175,39 @@ class ApiProvider{
       headers: {"Authorization":"token "+token,}
       );
 
+    return response;
+  }
+
+  static Future getPatientAppointments({required String token})async{
+
+    Uri url = Uri.parse(baseUrl+'api-appointment/patient-appointments/');
+
+    final http.Response response = await http.get(
+      url,
+      headers: { "Authorization":"token "+token}
+    );
+
+    return response;
+
+  }
+
+  static Future createPatientAppointment(
+    {required String token,
+    required String description,
+    required String date ,
+    }
+  )async{
+    Uri url = Uri.parse(baseUrl+'api-appointment/patient-appointments/');
+
+    var data ={      
+        "description": description,  
+        "date": date
+        }; 
+    final http.Response response = await http.post(
+      url,
+      headers: {"Accept": "application/json","content-type": "application/json", "Authorization":"token "+token},
+      body: jsonEncode(data)
+    );
     return response;
   }
 }
