@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:eclinic_mobile/models/patient_model.dart';
 import 'package:eclinic_mobile/models/appointment_model.dart';
+import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
+import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
+import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
 import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:eclinic_mobile/shared/components.dart';
 import 'package:eclinic_mobile/welcome_screen.dart';
@@ -152,7 +155,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                   raduis: 20,
                                   controller: descriptionController, 
                                   type: TextInputType.text, 
-                                  label: "Add description"
+                                  label: "Add description",
+                                  validate: (value){
+                                    if(value.toString().isEmpty){
+                                      return'description is required';
+                                    }
+                                    return null;
+                                  }
                                 ),
                                 const SizedBox(height: 20,),
                                 defaultFormField(
@@ -232,16 +241,25 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                               appointmentmodel.fromJson(responseData);
                                               appointments.add(appointmentmodel);
                                               Navigator.of(context).pop();
+                                              setState(() {
+                                                
+                                              });
                                              
                                             }else{
-                                              print("error");
-                                              print(value.body);
+                                              // print("error");
+                                              // print(value.body);
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) => buildPopupDialog(
+                                                  context, 
+                                                  title: 'Error', 
+                                                   msg: 'Error while requesting your appointment please try again'
+                                                )
+                                              );
                                             }
                                           });
 
-                                          setState(() {
-                                            
-                                          });
+                                          
                                     }
                                   }, 
                                   text: "request",
@@ -296,10 +314,10 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 style: TextStyle(fontSize: 20,color: Colors.green[600]),
                 ),
               onTap: (){
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                //  builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel))); 
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                 builder: (context) => PatientHomeScreeen(patientModel: widget.patientModel))); 
               },
             ),
             ListTile(
@@ -309,24 +327,24 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 style: TextStyle(fontSize: 20,color: Colors.green[600]),
                 ),
               onTap: (){
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                // builder: (context) => DisplayProfiletScreeen(patientModel: patientModel)(patientModel: widget.patientModel)));
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => DisplayProfiletScreeen(patientModel: widget.patientModel)));
 
               },
             ),
             ListTile(
               leading: Icon(Icons.date_range_rounded,color: Colors.green[600]),
               title: Text(
-                'Appointments',
+                'Medical record',
                 style: TextStyle(fontSize: 20,color: Colors.green[600]),
                 ),
               onTap: (){
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                // builder: (context) => AppointmentsScreen()));
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => MedicalRecordcreen(patientModel: widget.patientModel)));
               },
             ),
             ListTile(
@@ -426,7 +444,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
-                      'Hour: ',
+                      'Time: ',
                       style: TextStyle(fontSize: 20 ,fontWeight: FontWeight.w500),
                     ),
                     Text(   
