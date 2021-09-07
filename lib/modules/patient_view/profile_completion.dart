@@ -85,7 +85,7 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                           icon: Icon(
                             Icons.add_a_photo_outlined,
                           ),
-                          onPressed: () {},
+                          onPressed: () =>ImagePicker(),
                         ),
                       ),
                       Positioned(

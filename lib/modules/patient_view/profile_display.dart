@@ -7,12 +7,13 @@ import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
 import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
 import 'package:eclinic_mobile/welcome_screen.dart';
 import 'package:intl/intl.dart';
+
 
 
 class DisplayProfiletScreeen extends StatefulWidget {
@@ -80,6 +81,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
          widget.patientModel.lastName=userDetails['last_name'];
          widget.patientModel.sex=userDetails['sex'];
          widget.patientModel.email=userDetails['email'];
+         widget.patientModel.image=userDetails['image'];
          widget.patientModel.phoneNumber=userDetails['phone'];
          widget.patientModel.dateOfBirth=userDetails['date_of_birth'];
          widget.patientModel.city=userDetails['city'];
@@ -87,8 +89,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
          widget.patientModel.type=userDetails['patient']['type'];
          widget.patientModel.educationalLevel=userDetails['patient']['education_level'];
       
-         //print(selectedEL);
-         //print(selectedType);
+         print(widget.patientModel.image);
     
 
         }else{
@@ -147,16 +148,10 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                   children: [
                     Stack(children: [
                       CircleAvatar(
-                        radius: 60.00,
-                        foregroundImage:
-                            AssetImage('assets/images/default_profile.png'),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.add_a_photo_outlined,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
+                        radius: 70.00,
+                        foregroundImage: NetworkImage(widget.patientModel.image!)
+                      
+                     ),
                       Positioned(
                         right: 0,
                         bottom: 0,

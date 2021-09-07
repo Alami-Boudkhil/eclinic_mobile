@@ -24,8 +24,6 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
-    print(MediaQuery.of(context).size.width);
     return Scaffold(
       appBar: AppBar(
         elevation: 8,

@@ -9,7 +9,7 @@ class PatientModel{
   String? lastName;
   String? sex;
   String email;
-  Image? image;
+  String? image;
   String? phoneNumber;
   String? dateOfBirth;
   String? city;

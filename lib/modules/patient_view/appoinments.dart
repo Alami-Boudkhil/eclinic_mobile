@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:eclinic_mobile/models/patient_model.dart';
 import 'package:eclinic_mobile/models/appointment_model.dart';
+import 'package:eclinic_mobile/modules/patient_view/calendar.dart';
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
 import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
+
 
 class AppointmentsScreen extends StatefulWidget{
 
@@ -280,18 +283,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             Align(
               alignment: Alignment.bottomLeft,
               child: FloatingActionButton(
-                onPressed: ()=>showDialog(
-                  context: context,
-                  builder: (BuildContext context) => buildPopupDialog(
-                    context, 
-                    title: 'your calendar', 
-                    msg: 'your calendar with your appointments'
-                  )
-                ),
-                child: Icon(Icons.calendar_today_rounded),
-                ),
-            ),
-
+                onPressed: ()=>Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PatientCalendar(appointments: appointments,))),
+                child: Icon(Icons.calendar_today_rounded),                
+              ),
+            )
           ]
         ),
       ),
