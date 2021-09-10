@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import "package:eclinic_mobile/shared/components.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eclinic_mobile/modules/patient_view/home_screen.dart';
 import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
 import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
@@ -65,11 +64,24 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
   bool editCity=false;
   bool editAddress=false;
   
-  
-  @override
-  Widget build(BuildContext context) {
+  File? image;
+  Future getimagefrom(imagesource)async{
+    try{final image = await ImagePicker().pickImage(source: imagesource);
+    
+    if (image==null) return null;
     setState(() {
-      ApiProvider.userGet(token:widget.patientModel.token!).then((value) {
+      this.image= File(image.path);
+    });}on PlatformException catch(e){
+
+      print('failed loading image with error: $e');
+    }
+    
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     ApiProvider.userGet(token:widget.patientModel.token!).then((value) {
         
         if(value.statusCode==200){
 
@@ -113,8 +125,11 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
         //print(selectedType);
         //print(selectedEL);
     });
-    });
-     
+  }
+  @override
+  Widget build(BuildContext context) {
+    
+    
     return Scaffold(
       appBar: AppBar(
         iconTheme:  IconThemeData(color: Colors.black),
@@ -147,11 +162,9 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Stack(children: [
-                      CircleAvatar(
-                        radius: 70.00,
-                        foregroundImage: NetworkImage(widget.patientModel.image!)
-                      
-                     ),
+                      image!=null? 
+                      CircleAvatar(backgroundImage :new  FileImage(image!),radius: 60,):
+                      CircleAvatar(backgroundImage: NetworkImage(widget.patientModel.image!), radius: 60,),
                       Positioned(
                         right: 0,
                         bottom: 0,
@@ -161,7 +174,32 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                             color: Colors.blue,
                           ),
                           onPressed: () {
-                            ImagePicker();
+                            
+                            showModalBottomSheet(
+                              context: context, 
+                              builder:(BuildContext context){
+                                return Column(
+                                  mainAxisSize:MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(Icons.camera),
+                                      title: Text('camera'),
+                                      onTap: (){
+                                        Navigator.pop(context);
+                                        getimagefrom(ImageSource.camera);
+                                        }
+                                    ),
+                                    ListTile(
+                                      leading: Icon(Icons.folder_open_rounded),
+                                      title: Text('gallery'),
+                                      onTap: (){
+                                        Navigator.pop(context);
+                                        getimagefrom(ImageSource.gallery);
+                                        }
+                                    )
+                                  ],
+                                );
+                              });
                           },
                         ),
                       )

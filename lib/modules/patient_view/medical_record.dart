@@ -1344,8 +1344,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                              "- "+medicalRecordModel!.orientationCause!,
-                              textAlign: TextAlign.justify,
+                              "- "+medicalRecordModel!.orientationCause!,                             
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
@@ -1364,7 +1363,6 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           Expanded(
                             child: Text(
                               medicalRecordModel!.orientationResponse!,
-                              textAlign: TextAlign.justify,
                               maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
