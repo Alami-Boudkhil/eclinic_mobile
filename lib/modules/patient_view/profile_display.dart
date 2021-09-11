@@ -129,7 +129,22 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
   @override
   Widget build(BuildContext context) {
     
-    
+    if (widget.patientModel.image==null){
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text('network error', style: TextStyle(color: Colors.black),)
+        ),
+        body: Center(
+          child: TextButton(
+            onPressed: ()=> setState(() {
+              
+            }),
+            child:Text('try again'),
+          )
+        ),
+      );
+    }else{
     return Scaffold(
       appBar: AppBar(
         iconTheme:  IconThemeData(color: Colors.black),
@@ -639,5 +654,6 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
         ),
       ),
     );
+    }  
   }
 }

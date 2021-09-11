@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:eclinic_mobile/modules/auth/login/login_screen.dart';
 import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +52,20 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
   final cityController = TextEditingController();
   final addressController = TextEditingController();
 
+  File? image;
+  Future getimagefrom(imagesource)async{
+    try{final image = await ImagePicker().pickImage(source: imagesource);
+    
+    if (image==null) return null;
+    setState(() {
+      this.image= File(image.path);
+    });}on PlatformException catch(e){
+
+      print('failed loading image with error: $e');
+    }
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     emailController.text=widget.email;
@@ -77,17 +93,9 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Stack(children: [
-                      CircleAvatar(
-                        radius: 60.00,
-                        foregroundImage:
-                            AssetImage('assets/images/default_profile.png'),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.add_a_photo_outlined,
-                          ),
-                          onPressed: () =>ImagePicker(),
-                        ),
-                      ),
+                      image!=null? 
+                      CircleAvatar(backgroundImage :new  FileImage(image!),radius: 60,):
+                      CircleAvatar(backgroundImage: AssetImage('assets/images/default_profile.png'), radius: 60,),
                       Positioned(
                         right: 0,
                         bottom: 0,
@@ -97,7 +105,32 @@ class _PatienProfiletScreeenState extends State<PatienProfiletScreeen> {
                             color: Colors.blue,
                           ),
                           onPressed: () {
-                            ImagePicker();
+                            showModalBottomSheet(
+                              context: context, 
+                              builder: (BuildContext context){
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      leading:Icon(Icons.camera),
+                                      title: Text('camera'),
+                                      onLongPress: (){
+                                        Navigator.pop(context);
+                                        getimagefrom(ImageSource.camera);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading:Icon(Icons.folder_open_rounded),
+                                      title: Text('gallery'),
+                                      onLongPress: (){
+                                        Navigator.pop(context);
+                                        getimagefrom(ImageSource.gallery);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
                           },
                         ),
                       )
