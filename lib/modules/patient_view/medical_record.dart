@@ -24,19 +24,16 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
   MedicalRecordModel? medicalRecordModel;
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     ApiProvider.getMedicalRecord(token: widget.patientModel.token!).then((value) {
       if(value.statusCode==200){
         setState(() {
           final Map<String, dynamic> responseData = json.decode(value.body);
-          print('YOLO getGedicalRecord');
-          //print(widget.patientModel.token);
-          //print(responseData["patient_data"]);
+          print('YOLO getGedicalRecord');        
           medicalRecordModel = new MedicalRecordModel();
           medicalRecordModel!.fromJson(responseData);
-      
-          //print("inside: "+medicalRecordModel!.patientData.toString());
+          print('debbug: '+medicalRecordModel!.toString());
         });
       
     }else{
@@ -52,7 +49,8 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
     if(medicalRecordModel==null){
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Network error"),
+          backgroundColor: Colors.white,
+          title: new Text("Network error",style: TextStyle(color: Colors.black),),
         ),
         body:Center(
           child: TextButton(
@@ -65,7 +63,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
         ),
       );
     }else{
-    //print("debug:"+medicalRecordModel!.allergicReaction.toString() );
+    
     return Scaffold(
       
       appBar: AppBar(
@@ -114,13 +112,18 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'your informations:',
+                            'Personal informations:',
                             style: GoogleFonts.oswald(fontSize: 25),
                           ),
                           
                         ],
                       ),
-                      SizedBox(height: 8,),
+                      Divider(
+                        height: 8,
+                        thickness: 5,
+                        indent: 15,
+                        endIndent: 15,
+                      ),
                       Row(
                         children: [
                           Text(
@@ -171,7 +174,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            medicalRecordModel!.socialID.toString(),
+                            medicalRecordModel!.socialNumber.toString(),
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -180,12 +183,12 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       Row(
                         children: [
                           Text(
-                            'Biometric ID:',
+                            'Family situation:',
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            medicalRecordModel!.biometricID!,
+                            medicalRecordModel!.familySituation!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -228,42 +231,115 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                         indent: 15,
                         endIndent: 15,
                       ),
+                      Row (
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Tobaco',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                        ],
+                      ),
                       Row(
                         children: [
                           Text(
-                            'tobaco consumption:',
+                            'Smoking:',
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          medicalRecordModel?.tobacoConsumption==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),                      
+                          medicalRecordModel?.smoking==true?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.indeterminate_check_box_rounded,color:  Colors.red,),                      
                         ],
                       ),
                       SizedBox(height: 8,),
                       Row(
                         children: [
                           Text(
-                            'Tobaco taken as:',
+                            'chewing',
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          Text(
-                            medicalRecordModel!.tobacoTakenAs!,
-                            style:GoogleFonts.roboto(fontSize: 20), 
-                          )
+                          medicalRecordModel?.chewing==true?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.indeterminate_check_box_rounded,color:  Colors.red,),
                         ],
                       ),
                       SizedBox(height: 8,),
                       Row(
                         children: [
                           Text(
-                            'Number of Units:',
+                            'injection',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          medicalRecordModel?.injection==true?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.indeterminate_check_box_rounded,color:  Colors.red,),
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'ageFc:',
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            medicalRecordModel!.numberUnits.toString(),
-                            style:GoogleFonts.roboto(fontSize: 20), 
-                          )
+                            medicalRecordModel!.ageFc!,
+                            style: GoogleFonts.roboto(fontSize: 18,fontWeight: FontWeight.w800),
+                          ),
+                        ],
+                      ),
+                       SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'duration:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            medicalRecordModel!.duration!,
+                            style: GoogleFonts.roboto(fontSize: 18,fontWeight: FontWeight.w800),
+                          ),
+                        ],
+                      ),
+                       SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'smokingNumberUnits:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            medicalRecordModel!.smokingNumberUnits!.toString(),
+                            style: GoogleFonts.roboto(fontSize: 18,fontWeight: FontWeight.w800),
+                          ),
+                        ],
+                      ),
+                       SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'chewingNumberUnits:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            medicalRecordModel!.chewingNumberUnits!.toString(),
+                            style: GoogleFonts.roboto(fontSize: 18,fontWeight: FontWeight.w800),
+                          ),
+                        ],
+                      ),
+                       SizedBox(height: 8,),
+                      Row(
+                        children: [
+                          Text(
+                            'injectionNumbernits:',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            medicalRecordModel!.injectionNumbernits!.toString(),
+                            style: GoogleFonts.roboto(fontSize: 18,fontWeight: FontWeight.w800),
+                          ),
                         ],
                       ),
                       Divider(
@@ -278,7 +354,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          medicalRecordModel!.alcoholConsumption==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel!.alcohol==true?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.indeterminate_check_box_rounded,color: Colors.red,),
                           
                         ],
                       ),
@@ -291,11 +367,11 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       Row(
                         children: [
                           Text(
-                            'medication consumption:',
+                            'medication Consumption:',
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
-                          medicalRecordModel!.medicationConsumption==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel!.medicationConsumption==true?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.indeterminate_check_box_rounded,color:Colors.red),
                           
                         ],
                       ),
@@ -303,99 +379,22 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                       Row(
                         children: [
                           Text(
-                            'Type of medication:',
+                            'medications:',
                             style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
                           ),
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                                medicalRecordModel!.medications!,
-                                textAlign: TextAlign.justify,
+                                medicalRecordModel!.medication!,                       
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.roboto(fontSize: 20),
                                 maxLines: 10,),
                           )
                         ],
-                      ),
-                      Divider(
-                        height: 8,
-                        thickness: 5,
-                        indent: 15,
-                        endIndent: 15,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Others:',
-                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
-                          ),
-                          SizedBox(width: 5,),
-                          Expanded(
-                            child: Text(                         
-                              medicalRecordModel!.other!,
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.roboto(fontSize: 20),
-                            ),
-                          ),
-                        ],
-                      ),
-
-
-                      
+                      ),  
                   ],),
                 ),
-              ),
-              SizedBox(height: 16,),
-              Card(
-                elevation: 5,
-                color: Colors.blue[50],
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), 
-                side: BorderSide(
-                color: Colors.blue.withOpacity(0.2),
-                width: 2,
-                ),
-                  ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8,
-                    bottom: 8
-                  ),
-                  child: Column(
-                    
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'General diseases:',
-                            style: GoogleFonts.oswald(fontSize: 25),
-                          ),
-                          
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          
-                          Expanded(
-                            child: Text(
-                              medicalRecordModel!.generalDiseases!,
-                              textAlign: TextAlign.center,
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
-                      
-                      
-                  ],),
-                ),
-              ),
+              ),             
               SizedBox(height: 16,),
               Card(
                 elevation: 5,
@@ -419,158 +418,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Surgical intervention:',
-                            style: GoogleFonts.oswald(fontSize: 25),
-                          ),
-                          
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          
-                          Expanded(
-                            child: Text(
-                              medicalRecordModel!.surgicalIntervention!,
-                              textAlign: TextAlign.center,
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
-                      
-                      
-                  ],),
-                ),
-              ),
-              SizedBox(height: 16,),
-              Card(
-                elevation: 5,
-                color: Colors.blue[50],
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // if you need this
-                side: BorderSide(
-                color: Colors.blue.withOpacity(0.2),
-                width: 2,
-                ),
-                  ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8,
-                    bottom: 8
-                  ),
-                  child: Column(
-                    
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Congenital condition :',
-                            style: GoogleFonts.oswald(fontSize: 25),
-                          ),
-                          
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          
-                          Expanded(
-                            child: Text(
-                              medicalRecordModel!.congenitalCondition!,
-                              textAlign: TextAlign.center,
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
-                      
-                      
-                  ],),
-                ),
-              ),
-              SizedBox(height: 16,),
-              Card(
-                elevation: 5,
-                color: Colors.blue[50],
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // if you need this
-                side: BorderSide(
-                color: Colors.blue.withOpacity(0.2),
-                width: 2,
-                ),
-                  ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8,
-                    bottom: 8
-                  ),
-                  child: Column(
-                    
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Allergic reactions:',
-                            style: GoogleFonts.oswald(fontSize: 25),
-                          ),
-                          
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          
-                          Expanded(
-                            child: Text(
-                              
-                              medicalRecordModel!.allergicReaction!,
-                              textAlign: TextAlign.center,
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
-                      
-                      
-                  ],),
-                ),
-              ),
-              SizedBox(height: 16,),
-              Card(
-                elevation: 5,
-                color: Colors.blue[50],
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // if you need this
-                side: BorderSide(
-                color: Colors.blue.withOpacity(0.2),
-                width: 2,
-                ),
-                  ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8,
-                    bottom: 8
-                  ),
-                  child: Column(
-                    
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'General:',
+                            'General informations:',
                             style: GoogleFonts.oswald(fontSize: 25),
                           ),
                           
@@ -590,7 +438,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            medicalRecordModel!.wieght!.substring(0,5)+" Kg",
+                            medicalRecordModel!.wieght!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -604,7 +452,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           ),
                           SizedBox(width: 5,),
                           Text(
-                            medicalRecordModel!.height!.substring(0,5)+" cm",
+                            medicalRecordModel!.height!,
                             style:GoogleFonts.roboto(fontSize: 20), 
                           )
                         ],
@@ -736,7 +584,27 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                               style: GoogleFonts.roboto(fontSize: 20),
                               )
                         ],
-                      ),  
+                      ),
+                      Divider(
+                        height: 8,
+                        thickness: 5,
+                        indent: 15,
+                        endIndent: 15,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Blood Type',
+                            style: GoogleFonts.roboto(fontSize: 20,fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                              medicalRecordModel!.bloodType!,
+                              style: GoogleFonts.roboto(fontSize: 20),
+                              )
+                        ],
+                      ),
+
                   ],),
                 ),
               ),
@@ -1291,7 +1159,7 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                             'Aptitude:',
                             style: GoogleFonts.oswald(fontSize:25 ),
                           ),
-                          medicalRecordModel!.aptitude==true?Icon(Icons.check_circle):Icon(Icons.indeterminate_check_box_rounded),
+                          medicalRecordModel!.aptitude==true?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.indeterminate_check_box_rounded,color: Colors.red,),
                           
                           
                         ],
@@ -1306,70 +1174,15 @@ class _MedicalRecordcreenState extends State<MedicalRecordcreen> {
                           SizedBox(width: 5,),
                           Expanded(
                             child: Text(
-                              medicalRecordModel!.reason!,
-                              
-                              maxLines: 10,
+                             medicalRecordModel!.reason!,                             
+                              maxLines: 20,
                               overflow: TextOverflow.ellipsis,
                               style:GoogleFonts.roboto(fontSize: 20), 
                             ),
                           )
                         ],
                       ),
-                      SizedBox(height: 8,),
-                      Row(
-                        children: [
-                          Text(
-                            'Orientation specialist:',
-                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
-                          ),
-                          SizedBox(width: 5,),
-                          Expanded(
-                            child: Text(
-                              medicalRecordModel!.orientationSpecialist!,
-                              
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        children: [
-                          Text(
-                            'Orientation cause:',
-                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
-                          ),
-                          SizedBox(width: 5,),
-                          Expanded(
-                            child: Text(
-                              "- "+medicalRecordModel!.orientationCause!,                             
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        children: [
-                          Text(
-                            'Orientation response:',
-                            style:GoogleFonts.roboto(fontSize: 20,fontWeight:FontWeight.w800), 
-                          ),
-                          SizedBox(width: 5,),
-                          Expanded(
-                            child: Text(
-                              medicalRecordModel!.orientationResponse!,
-                              maxLines: 10,
-                              overflow: TextOverflow.ellipsis,
-                              style:GoogleFonts.roboto(fontSize: 20), 
-                            ),
-                          )
-                        ],
-                      ),
+                      
 
                       
                   ],),

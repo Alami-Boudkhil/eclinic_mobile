@@ -130,13 +130,13 @@ class ApiProvider{
 
     var data = {
       //"uid": "a8d5ae59-700b-4e06-bfed-200ea0c17171",
-      "patient": {
-        //"pid": widget.patientModel.pid,
-        //"deleted": null,
-        "type": type,
-        "education_level":educationLevel,
-        //"is_approved": false
-      },
+      // "patient": {
+      //   //"pid": widget.patientModel.pid,
+      //   //"deleted": null,
+      //   "type": type,
+      //   "education_level":educationLevel,
+      //   //"is_approved": false
+      // },
       //"last_login": "2021-08-19T12:23:05.723842Z",
       //"is_superuser": false,
       "first_name": firstName,
@@ -156,7 +156,7 @@ class ApiProvider{
       //"created_on": "2021-08-17T23:12:45.172284Z"
     };
 
-    final http.Response response = await http.put(
+    final http.Response response = await http.patch(
       url,
       headers: {'Authorization':"token "+token,"content-type": "application/json",},
       body: jsonEncode(data)

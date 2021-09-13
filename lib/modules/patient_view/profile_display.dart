@@ -79,7 +79,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
   }
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
      ApiProvider.userGet(token:widget.patientModel.token!).then((value) {
         
@@ -468,36 +468,9 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                         SizedBox(
                           width: 30,
                         ),
-                        DropdownButton(
-                          style:
-                              const TextStyle(fontSize: 18, color: Colors.blue),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.blueAccent,
-                          ),
-                          elevation: 20,
-                          value: selectedType,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedType = newValue.toString();
-                              if (selectedType == 'ATP') {
-                                selectedElList = atpEL;
-                                selectedEL = 'NONE';
-                              } else if (selectedType == 'Student') {
-                                selectedElList = studentEL;
-                                selectedEL = '1-CPI';
-                              } else {
-                                selectedElList = teacherEL;
-                                selectedEL ='MA-A';
-                              }
-                            });
-                          },
-                          items: types.map((String type) {
-                            return new DropdownMenuItem<String>(
-                              value: type,
-                              child: new Text(type),
-                            );
-                          }).toList(),
+                        Text(
+                         widget.patientModel.type!,
+                          style: TextStyle(fontSize: 20,color: Colors.blue, ),
                         ),
                       ],
                     ),
@@ -553,11 +526,11 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                                 dateOfBirth: dateBirthController.text,
                                 city: cityController.text,
                                 address: addressController.text,
-                                type: selectedType,
+                                //type: selectedType,
                                 educationLevel: selectedEL,
                              ).then((value){
                                   if(value.statusCode==200){
-                                    print('YOLO');
+                                    print('YOLO update');
                                     print(value.body);
       
                                   }else{
