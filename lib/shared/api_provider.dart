@@ -82,8 +82,6 @@ class ApiProvider{
 
   }
   
-
-  
   static Future userlogout({required String token})async{
 
     Uri url=Uri.parse(baseUrl+'rest-auth/logout/'); 
