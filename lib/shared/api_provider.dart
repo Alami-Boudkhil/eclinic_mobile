@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-
+ import 'package:http_parser/http_parser.dart';
 
 
 
@@ -113,54 +113,36 @@ class ApiProvider{
 
   static Future userUpdate({ 
       required String token,
+      String? imagePath,
       String? firstName,
       String? lasttName,
       String? sex,
-      String? email,
       String? phone,
       String? dateOfBirth,
       String? city,
       String? address,
-      String? type,
-      String? educationLevel,
+      
     }
   )async{
 
     Uri url = Uri.parse(baseUrl+'rest-auth/user/');
+      
 
-    var data = {
-      //"uid": "a8d5ae59-700b-4e06-bfed-200ea0c17171",
-      // "patient": {
-      //   //"pid": widget.patientModel.pid,
-      //   //"deleted": null,
-      //   "type": type,
-      //   "education_level":educationLevel,
-      //   //"is_approved": false
-      // },
-      //"last_login": "2021-08-19T12:23:05.723842Z",
-      //"is_superuser": false,
-      "first_name": firstName,
-      "last_name": lasttName,
-      //"is_active": true,
-      //"date_joined": "2021-08-17T23:12:45.171997Z",
-      //"deleted": null,
-      "sex": sex,
-      "email":email,
-      //"role": "Patient",
-      //"image": null,
-      "phone": phone,
-      "date_of_birth": dateOfBirth,
-      "city": city,
-      "address": address,
-      //"is_confirmed": false,
-      //"created_on": "2021-08-17T23:12:45.172284Z"
-    };
+    var request = http.MultipartRequest('PATCH', url)
+    
+    ..fields['first_name'] = firstName!
+    ..fields['last_name'] = lasttName!
+    ..fields['sex'] = sex!
+    ..fields['phone'] = phone!
+    ..fields['date_of_birth'] = dateOfBirth!
+    ..fields['city'] = city!
+    ..fields['address'] = address!
 
-    final http.Response response = await http.patch(
-      url,
-      headers: {'Authorization':"token "+token,"content-type": "application/json",},
-      body: jsonEncode(data)
-      );
+    ..files.add(await http.MultipartFile.fromPath(
+      'image', imagePath!,
+      contentType: MediaType('image','jpg')))
+    ..headers.addAll({"Authorization":"token "+token,});
+    http.Response response = await http.Response.fromStream(await request.send());
 
     return response;
   }

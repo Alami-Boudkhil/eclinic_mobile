@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:eclinic_mobile/models/patient_model.dart';
 import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
 import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';

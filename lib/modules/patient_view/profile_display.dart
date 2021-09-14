@@ -30,21 +30,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
   var formKey = GlobalKey<FormState>();
   
 
-  List<String> types = ['ATP', 'Student', 'Teacher'];
-  List<String> atpEL = ['NONE'];
-  List<String> studentEL = [
-    '1CPI',
-    '2CPI',
-    '1CS',
-    '2CS-ISI',
-    '2CS-SIW',
-    '3CS-ISI',
-    '3CS-SIW'
-  ];
-  List<String> teacherEL = ['MA-A', 'MA-B', 'MC-A', 'MC-B', 'Professor'];
-  String? selectedType;
-  List<String> selectedElList = [];
-  String? selectedEL;
+  
 
 
   var firstNameController = TextEditingController();
@@ -119,11 +105,10 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
         cityController.text=widget.patientModel.city!;
         addressController.text=widget.patientModel.address!;
 
-        selectedType=widget.patientModel.type!;
-      
-        selectedEL=widget.patientModel.educationalLevel!;
-        //print(selectedType);
-        //print(selectedEL);
+
+        setState(() {
+          
+        });
     });
   }
   @override
@@ -317,16 +302,10 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                     Padding(
                       padding: const EdgeInsetsDirectional.only(end: 50),
                       child: defaultFormField(
-                          suffix: IconButton(
-                              onPressed: (){
-                                setState(() {
-                                  editEmail= !editEmail;
-                                });
-                              }, 
-                              icon: Icon(Icons.edit)),
+                          
                           controller: emailController,
                           type: TextInputType.emailAddress,
-                          readOnly: editEmail,
+                          readOnly: true,
                           validate: (value){
                             if (value.toString().isEmpty) {
                             return 'Email must not be empty';
@@ -486,26 +465,9 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                         SizedBox(
                           width: 30,
                         ),
-                        DropdownButton(
-                          style:
-                              const TextStyle(fontSize: 18, color: Colors.blue),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.blueAccent,
-                          ),
-                          elevation: 20,
-                          value: selectedEL,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedEL = newValue.toString();
-                            });
-                          },
-                          items: selectedElList.map((String type) {
-                            return new DropdownMenuItem<String>(
-                              value: type,
-                              child: new Text(type),
-                            );
-                          }).toList(),
+                         Text(
+                          widget.patientModel.educationalLevel!,
+                          style: TextStyle(fontSize: 20,color: Colors.blue, ),
                         ),
                       ],
                     ),
@@ -518,24 +480,31 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                            
                              ApiProvider.userUpdate(
                                 token: widget.patientModel.token!,
+                                imagePath: image!.path,
                                 firstName: firstNameController.text,
                                 lasttName: lastNameController.text,
-                                sex:userSex,
-                                email: emailController.text,
+                                sex:userSex,                             
                                 phone: phoneNumberController.text,
                                 dateOfBirth: dateBirthController.text,
                                 city: cityController.text,
                                 address: addressController.text,
-                                //type: selectedType,
-                                educationLevel: selectedEL,
+                                
                              ).then((value){
+                                  
                                   if(value.statusCode==200){
+                                    print("debbug:"+value.body);
                                     print('YOLO update');
-                                    print(value.body);
+                                    // print(value.body);
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>buildPopupDialog(
+                                        context, 
+                                        title: "Updated Succefully", 
+                                        msg: "you have updated your informations seccufully"));
       
                                   }else{
                                     print('error');
-                                    print(value.body);
+                                    print("debbug:"+value.body);
                                   }
                              });
                            
