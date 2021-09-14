@@ -480,7 +480,7 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                            
                              ApiProvider.userUpdate(
                                 token: widget.patientModel.token!,
-                                imagePath: image!.path,
+                                imagePath: image!=null?image!.path:"no image",
                                 firstName: firstNameController.text,
                                 lasttName: lastNameController.text,
                                 sex:userSex,                             

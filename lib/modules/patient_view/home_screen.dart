@@ -18,10 +18,28 @@ class PatientHomeScreeen extends StatefulWidget {
 }
 
 class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
-
-
+  String profileimage= " ";
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   ApiProvider.getUserImage(token: widget.patientModel.token!).then((value) {
+  //     if(value!="error"){
+  //       profileimage = value;
+  //     }
+  //   });
+    
+  // }
   @override
   Widget build(BuildContext context) {
+    ApiProvider.getUserImage(token: widget.patientModel.token!).then((value) {
+      if(value!="error"){
+        setState(() {
+          profileimage = value;
+        });
+      }
+      
+    });
     return Scaffold(
       appBar: AppBar(
         elevation: 8,
@@ -34,10 +52,13 @@ class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
           backgroundColor: Colors.transparent,
           ),
         actions: [
-          
+          profileimage == " "?
           CircleAvatar(
             radius: 23.00,
-            foregroundImage:AssetImage('assets/images/default_profile.png'),),
+            foregroundImage:AssetImage('assets/images/default_profile.png'),):
+          CircleAvatar(
+            radius: 23.00,
+            foregroundImage:NetworkImage(profileimage),),
           SizedBox(
             width: 8,
           ),

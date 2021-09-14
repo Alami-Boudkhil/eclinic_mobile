@@ -111,9 +111,26 @@ class ApiProvider{
     return response;
   }
 
+  static Future getUserImage({required String token}) async{
+    Uri url = Uri.parse(baseUrl+'rest-auth/user/');
+
+    final http.Response response = await http.get(
+      url,
+      headers: {"Authorization":"token "+token,}
+      );
+
+    if(response.statusCode==200){
+      Map<String,dynamic> userDetails=jsonDecode(response.body);
+
+      return userDetails['image'];
+    }else {
+      return "error";
+    }
+  }
+
   static Future userUpdate({ 
       required String token,
-      String? imagePath,
+      String imagePath = "no image",
       String? firstName,
       String? lasttName,
       String? sex,
@@ -136,12 +153,14 @@ class ApiProvider{
     ..fields['phone'] = phone!
     ..fields['date_of_birth'] = dateOfBirth!
     ..fields['city'] = city!
-    ..fields['address'] = address!
+    ..fields['address'] = address!;
 
-    ..files.add(await http.MultipartFile.fromPath(
-      'image', imagePath!,
-      contentType: MediaType('image','jpg')))
-    ..headers.addAll({"Authorization":"token "+token,});
+    if(imagePath!="no image"){
+    request.files.add(await http.MultipartFile.fromPath(
+      'image', imagePath,
+      contentType: MediaType('image','jpg')));
+    }
+    request.headers.addAll({"Authorization":"token "+token,});
     http.Response response = await http.Response.fromStream(await request.send());
 
     return response;
