@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "704019902739",
+    "project_id": "e-clinic-e811b",
+    "storage_bucket": "e-clinic-e811b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704019902739:android:5adb667f0870cbfc18eae6",
+        "android_client_info": {
+          "package_name": "com.example.eclinic_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704019902739-b74qbq2bfmbt31j7ukukho77b363qfs6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCg-jWxmbDde6jropkNLq4sGiHxH3w8EE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704019902739-b74qbq2bfmbt31j7ukukho77b363qfs6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
