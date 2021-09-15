@@ -309,7 +309,7 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "4.1.0"
   matcher:
     dependency: transitive
     description:
@@ -411,10 +411,12 @@ packages:
   pusher_beams:
     dependency: "direct main"
     description:
-      name: pusher_beams
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.3+3"
+      path: "."
+      ref: master
+      resolved-ref: e481a2fc48eab8ecea69246408d04b6c375d10e4
+      url: "https://github.com/yegobox/flutter_pusher_beams.git"
+    source: git
+    version: "0.5.4+1"
   rxdart:
     dependency: transitive
     description:

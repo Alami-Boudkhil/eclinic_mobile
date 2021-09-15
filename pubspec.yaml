@@ -37,7 +37,10 @@ dependencies:
   firebase_messaging: ^10.0.7
   firebase_core: ^1.6.0
   firebase_analytics: ^8.3.2
-  pusher_beams: ^0.5.3+3
+  pusher_beams:
+    git:
+      url: https://github.com/yegobox/flutter_pusher_beams.git
+      ref: master
   flutter_launcher_icons: ^0.9.2
 flutter_icons:
   android: true

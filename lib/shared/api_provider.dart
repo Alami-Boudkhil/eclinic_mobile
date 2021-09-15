@@ -109,6 +109,23 @@ class ApiProvider{
     return response;
   }
 
+  static Future getUserUid({required String token})async{
+
+    Uri url = Uri.parse(baseUrl+'rest-auth/user/');
+
+    final http.Response response = await http.get(
+      url,
+      headers: {"Authorization":"token "+token,}
+      );
+
+    if(response.statusCode==200){
+      Map<String,dynamic> userDetails=jsonDecode(response.body);
+
+      return userDetails['uid'];
+    }else {
+      return "error";
+    }
+  }
   static Future getUserImage({required String token}) async{
     Uri url = Uri.parse(baseUrl+'rest-auth/user/');
 

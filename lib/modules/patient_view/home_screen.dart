@@ -3,9 +3,13 @@ import 'package:eclinic_mobile/modules/patient_view/appoinments.dart';
 import 'package:eclinic_mobile/modules/patient_view/medical_record.dart';
 import 'package:eclinic_mobile/shared/api_provider.dart';
 import 'package:eclinic_mobile/welcome_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart'; 
 import 'package:eclinic_mobile/modules/patient_view/profile_display.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:pusher_beams/pusher_beams.dart';
 
 
 class PatientHomeScreeen extends StatefulWidget {
@@ -19,10 +23,22 @@ class PatientHomeScreeen extends StatefulWidget {
 
 class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
   String profileimage= " ";
+  
   @override
-  void initState() {
+  void initState()  {
     
     super.initState();
+    ApiProvider.getUserUid(token: widget.patientModel.token!).then((value) async{
+      if(value!="error"){
+       
+        try {
+          await PusherBeams.addDeviceInterest(value);
+        }on PlatformException catch(e){
+          print("error : $e");
+        }
+      }
+    });
+    
     ApiProvider.getUserImage(token: widget.patientModel.token!).then((value) {
       if(value!="error"){
         setState(() {
