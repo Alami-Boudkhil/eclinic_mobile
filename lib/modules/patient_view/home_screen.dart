@@ -19,25 +19,22 @@ class PatientHomeScreeen extends StatefulWidget {
 
 class _PatientHomeScreeenState extends State<PatientHomeScreeen> {
   String profileimage= " ";
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   ApiProvider.getUserImage(token: widget.patientModel.token!).then((value) {
-  //     if(value!="error"){
-  //       profileimage = value;
-  //     }
-  //   });
-    
-  // }
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    
+    super.initState();
     ApiProvider.getUserImage(token: widget.patientModel.token!).then((value) {
       if(value!="error"){
         setState(() {
           profileimage = value;
         });
       }
+    });
+    
+  }
+  @override
+  Widget build(BuildContext context) {
+    setState(() {
       
     });
     return Scaffold(
