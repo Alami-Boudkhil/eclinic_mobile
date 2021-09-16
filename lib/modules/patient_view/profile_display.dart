@@ -194,54 +194,46 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                     SizedBox(
                       height: 40.00,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: defaultFormField(
-                            suffix: IconButton(
-                              onPressed: (){
-                                setState(() {
-                                  editFirstName= !editFirstName;
-                                });
-                              }, 
-                              icon: Icon(Icons.edit)),
-                            controller: firstNameController,
-                            type: TextInputType.text,
-                            label: 'First Name',
-                            readOnly: editFirstName,
-                            validate: (value){
-                              if(value.toString().isEmpty){
-                               return'First Name is required';
-                              }
-                              return null;
-                            }
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: defaultFormField(
-                            suffix: IconButton(
-                              onPressed: (){
-                                setState(() {
-                                  editLastName= !editLastName;
-                                });
-                              }, 
-                              icon: Icon(Icons.edit)),
-                            readOnly: editLastName,  
-                            controller: lastNameController,
-                            type: TextInputType.text,
-                            label: 'Last Name',
-                            validate: (value){
-                              if(value.toString().isEmpty){
-                               return'Last Name is required';
-                              }
-                              return null;
-                            }
-                          ),
-                        ),
-                      ],
+                    defaultFormField(
+                      suffix: IconButton(
+                        onPressed: (){
+                          setState(() {
+                            editFirstName= !editFirstName;
+                          });
+                        }, 
+                        icon: Icon(Icons.edit)),
+                      controller: firstNameController,
+                      type: TextInputType.text,
+                      label: 'First Name',
+                      readOnly: editFirstName,
+                      validate: (value){
+                        if(value.toString().isEmpty){
+                         return'First Name is required';
+                        }
+                        return null;
+                      }
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    defaultFormField(
+                      suffix: IconButton(
+                        onPressed: (){
+                          setState(() {
+                            editLastName= !editLastName;
+                          });
+                        }, 
+                        icon: Icon(Icons.edit)),
+                      readOnly: editLastName,  
+                      controller: lastNameController,
+                      type: TextInputType.text,
+                      label: 'Last Name',
+                      validate: (value){
+                        if(value.toString().isEmpty){
+                         return'Last Name is required';
+                        }
+                        return null;
+                      }
                     ),
                     SizedBox(
                       height: 20,
@@ -286,26 +278,23 @@ class _DisplayProfiletScreeenState extends State<DisplayProfiletScreeen> {
                     SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 50),
-                      child: defaultFormField(
-                          
-                          controller: emailController,
-                          type: TextInputType.emailAddress,
-                          readOnly: true,
-                          validate: (value){
-                            if (value.toString().isEmpty) {
-                            return 'Email must not be empty';
-                            } else if (!value.toString().contains('@esi-sba')) {
-                           return 'Only ESI-Sba emails are accepted';
-                           }
-                           return null;                           
-                          }, 
-                          label: 'email',
-                          prefix: Icons.email_rounded,
-                          
-                          ),                          
-                    ),
+                    defaultFormField(
+                        
+                        controller: emailController,
+                        type: TextInputType.emailAddress,
+                        readOnly: true,
+                        validate: (value){
+                          if (value.toString().isEmpty) {
+                          return 'Email must not be empty';
+                          } else if (!value.toString().contains('@esi-sba')) {
+                         return 'Only ESI-Sba emails are accepted';
+                         }
+                         return null;                           
+                        }, 
+                        label: 'email',
+                        prefix: Icons.email_rounded,
+                        
+                        ),
                     SizedBox(
                       height: 20,
                     ),

@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validate: (value) {
                         if (value.toString().isEmpty) {
                           return 'password must not be empty';
-                        } else if (value.toString().length < 6) {
+                        } else if (value.toString().length < 4) {
                           return 'Password too short';
                         }
                                 
